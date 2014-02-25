@@ -1,9 +1,9 @@
 import os, sys
 
-sys.path.append('/var/django_projects/')
+sys.path.append('/opt/wwwroot/django_projects/')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'classcomm.settings'
 
-path = '/var/django_projects/classcomm'
+path = '/opt/wwwroot/django_projects/classcomm'
 if path not in sys.path:
     sys.path.append(path)
 import django.core.handlers.wsgi

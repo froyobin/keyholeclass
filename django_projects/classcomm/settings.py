@@ -45,7 +45,7 @@ ROOT_URLCONF = 'classcomm.urls'
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = '/var/www/media/'
+MEDIA_ROOT = '/opt/wwwroot/www/media/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -58,10 +58,11 @@ MEDIA_URL = ''
 ADMIN_MEDIA_PREFIX = '/media/static/admin/'
 
 # Static Media Root -- All project static files will be stored here.
-STATIC_ROOT = '/var/www/media/static/'
+STATIC_ROOT = '/opt/wwwroot/www/media/static/'
 
 # Static URL -- URI prefix for static files.
 STATIC_URL = '/media/static/'
+#STATIC_URL = '/classcomm/student_portal/static'
 
 # URL for classcomm authentiaction
 LOGIN_URL = '/registration/login/'
@@ -113,7 +114,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    '/var/django_templates/',
+    '/opt/wwwroot/django_templates/',
 )
 
 MIDDLEWARE_CLASSES = (
