@@ -291,6 +291,13 @@ class RegistrationProfile(models.Model):
         
         message = render_to_string('registration/activation_email.txt',
                                    ctx_dict)
-        
+	
+	####modify for sending mail##############
+	settings.EMAIL_HOST="smtp.163.com"
+	settings.EMAIL_HOST_PASSWORD="aabbccdd"
+	settings.EMAIL_HOST_USER="commonasp2"
+	settings.DEFAULT_FROM_EMAIL = "commonasp2@163.com"
+	####modify for sending mail##############
+
         self.user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
     
