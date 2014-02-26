@@ -4,7 +4,7 @@
 DEBUG = True
 TEMPLATE_DEBUG = True
 SITE_ID = 1
-INTERNAL_IPS = ('127.0.0.1', '172.16.71.57')
+INTERNAL_IPS = ('127.0.0.1', '172.16.71.58')
 DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False,
 }
@@ -142,7 +142,7 @@ INSTALLED_APPS = (
     'classcomm.registration',
     'classcomm.dashboard',
     'debug_toolbar',
-    'south',
+#    'south',
 #    'paging',
 #    'indexer', # Sentry Depend.
 #    'paging', # Sentry Depend.
