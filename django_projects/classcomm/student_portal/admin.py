@@ -47,17 +47,17 @@ class AssignmentInline(admin.TabularInline):
 
 class CourseAdmin(admin.ModelAdmin):
     """ Admin customization for Course Models. """
-    list_display = ['name', 'department', 'director', 'open_enrollments']
+    list_display = ['name', 'course_level','course_circle','start_date','end_date','department', 'director', 'open_enrollments']
     list_filter = ['department', 'open_enrollments', 'enrollment_length']
     list_select_related = True
     search_fields = ['name', 'description', 'department__name', 'director__username', 'director__email']
     fieldsets = (
         (None, {
-            'fields': ('department', 'name', 'enrollment_length', 'description')
+            'fields': ('department', 'name','course_level','course_circle','start_date','end_date','director','enrollment_length', 'description')
         }),
         ('Advanced options', {
             'classes': ('collapse',),
-            'fields': ('director', 'open_enrollments')
+            'fields': ('open_enrollments',)
         }),
     )
     inlines = [InstructorInline, MentorInline, AssignmentInline]

@@ -50,7 +50,11 @@ class Course(models.Model):
     # Data Model (DB) Fields
     department = models.ForeignKey(Department)
     name = models.CharField(max_length=100)
-    director = models.ForeignKey(User, verbose_name='Course Director', null=True, blank=True)
+    course_level = models.IntegerField(verbose_name='Levels',default=1,help_text="define how many levels")
+    course_circle = models.IntegerField(verbose_name='Circle',default=1,help_text="define how many Circles in one level")
+    start_date = models.DateField('Start Date', help_text="Date course begins.",blank=False)
+    end_date= models.DateField('End Date', help_text="Date course ends.",blank=False)
+    director = models.ForeignKey(User, verbose_name='Course Director', null=True, blank=False)
     enrollment_length = models.IntegerField('Default Enrollment Length (in Weeks)', default=16)
     description = models.TextField('Description')
     open_enrollments = models.BooleanField("Open Student Enrollments?", default=False)
