@@ -46,7 +46,7 @@ class Course(models.Model):
         Optionally, a Course may specify a single Course Director User.
         Also Optionally, a Course may be marked as available for open_enrollments (default=False).
     """
-
+    #DAYS = (('R','RED'),('B','Ylack'),('G','White'))
     # Data Model (DB) Fields
     department = models.ForeignKey(Department)
     name = models.CharField(max_length=100)
@@ -54,6 +54,7 @@ class Course(models.Model):
     course_circle = models.IntegerField(verbose_name='Circle',default=1,help_text="define how many Circles in one level")
     start_date = models.DateField('Start Date', help_text="Date course begins.",blank=False)
     end_date= models.DateField('End Date', help_text="Date course ends.",blank=False)
+    dayOfweek= models.CharField(max_length=7)
     director = models.ForeignKey(User, verbose_name='Course Director', null=True, blank=False)
     enrollment_length = models.IntegerField('Default Enrollment Length (in Weeks)', default=16)
     description = models.TextField('Description')
