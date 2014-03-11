@@ -46,24 +46,32 @@ class AssignmentInline(admin.TabularInline):
     model = Assignment
     extra = 1
 # EndClass
+class CourseTime(admin.TabularInline):
+    """ Assignment Inline Customization for Courses. """
+    model = CourseTime
+    extra = 1
+# EndClass
 
 class CourseAdmin(admin.ModelAdmin):
-    form = CourseAdminForm
+    #form = CourseAdminForm
     """ Admin customization for Course Models. """
-    list_display = ['name', 'course_level','course_circle','start_date','end_date','department','director', 'open_enrollments']
+    list_display = ['name', 'course_level','course_circle','department','director', 'open_enrollments']
     list_filter = ['department', 'open_enrollments', 'enrollment_length']
     list_select_related = True
     search_fields = ['name', 'description', 'department__name', 'director__username', 'director__email']
     fieldsets = (
-        (None, {
-            'fields': ('department', 'name','course_level','course_circle','start_date','end_date','dayOfweek','director','enrollment_length', 'description')
+        ('Basic information', {
+            'fields': ('department', 'name','course_level','course_circle','start_date','director','enrollment_length', 'description')
         }),
-        ('Advanced options', {
+        #('Class detail', {
+        #    'fields': ('start_date','end_date','dayOfweek',)
+        #,'classes':['collapse']}),
+	('Advanced options', {
             'classes': ('collapse',),
             'fields': ('open_enrollments',)
         }),
     )
-    inlines = [InstructorInline, MentorInline, AssignmentInline]
+    inlines = [CourseTime,InstructorInline, MentorInline, AssignmentInline]
 
     def queryset(self, request):
         """ Taylor queryset for request.user's active Classcomm roles. """

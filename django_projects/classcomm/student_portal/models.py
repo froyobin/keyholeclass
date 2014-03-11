@@ -39,6 +39,7 @@ class Department(models.Model):
     # EndDef
 # EndClass
 
+
 class Course(models.Model):
     """ Data Model representing a Course in Classcomm.
         All Courses are contained by a Department and requires both name and description.
@@ -46,15 +47,13 @@ class Course(models.Model):
         Optionally, a Course may specify a single Course Director User.
         Also Optionally, a Course may be marked as available for open_enrollments (default=False).
     """
-    #DAYS = (('R','RED'),('B','Ylack'),('G','White'))
     # Data Model (DB) Fields
-    department = models.ForeignKey(Department)
+    department = models.ForeignKey(Department,blank=False,null=True)
     name = models.CharField(max_length=100)
     course_level = models.IntegerField(verbose_name='Levels',default=1,help_text="define how many levels")
     course_circle = models.IntegerField(verbose_name='Circle',default=1,help_text="define how many Circles in one level")
+    #dayOfweek= models.CharField(max_length=7)
     start_date = models.DateField('Start Date', help_text="Date course begins.",blank=False)
-    end_date= models.DateField('End Date', help_text="Date course ends.",blank=False)
-    dayOfweek= models.CharField(max_length=7)
     director = models.ForeignKey(User, verbose_name='Course Director', null=True, blank=False)
     enrollment_length = models.IntegerField('Default Enrollment Length (in Weeks)', default=16)
     description = models.TextField('Description')
@@ -65,6 +64,7 @@ class Course(models.Model):
     
     def validate_unique(self, exclude=None):
         """ Verifies Course is unique (may raise ValidationError when not). """
+         
         if self.department and self.name:
             courses = Course.objects.all().filter(department=self.department).filter(name=self.name)
             for course in courses:
@@ -97,6 +97,52 @@ class Course(models.Model):
         super(Course, self).save()
 # EndClass
 
+class CourseTime(models.Model):
+    DAYS = (('1','MONDAY'),('2','TUESDAY'),('3','Wednesday'),('4','THURSDAY'),('5','FRIDAY'),('6','Saturday'),('7','Sunday'))
+    COURSETIME = (('1','8:00-10:00'),('2','10:30-12:30'),('3','13:30-15:30'),('4','16:00-18:00'))
+    Coursename = models.ForeignKey(Course)
+    Dayofweek = models.CharField(max_length=1,choices=DAYS,blank=False,null=True)
+    TimeofDay = models.CharField(max_length=1,choices=COURSETIME,blank=False,null=True)
+    Coursestart_date = models.DateField('Start Date', help_text="Date course begins.",blank=False,null=True)
+    Courseend_date= models.DateField('End Date', help_text="Date course ends.",blank=False,null=True)
+    class Meta:
+        unique_together=(('Coursename','Dayofweek','TimeofDay','Coursestart_date','Courseend_date'),)
+    def __unicode__(self):
+        return (self.Coursename.name)
+    
+#    def validate_unique(self, exclude=None):
+#	    """ Verifies Course is unique (may raise ValidationError when not). """
+#	if self.Coursename:
+#		courses = self.objects.all()
+#	for course in courses:
+#	if course.pk != self.pk:
+#	    error_msg = 'Existing Course ' + self.name + ' in Department ' + self.department.name + '!'
+#	    raise ValidationError({NON_FIELD_ERRORS: [error_msg]})
+#	super(CourseTime, self).validate_unique()
+
+    def delete(self):
+#        """ Consider removing User from Director Group on Delete. """
+#        try:
+#            if Course.objects.all().filter(director=self.director).count() <= 1:
+#                director_group = Group.objects.get(name="Director")
+#                self.director.groups.remove(director_group)
+#        except ObjectDoesNotExist:
+#            pass
+        super(CourseTime, self).delete()
+
+    def save(self):
+        """ Add User to admin and Instructor Group on save (if not already). """
+#        if not self.director.is_staff:
+#            self.director.is_staff = True
+#            self.director.save()
+#        try:
+#            if self.director.groups.all().filter(name="Director").count() == 0:
+#                director_group = Group.objects.get(name="Director")
+#                self.director.groups.add(director_group)
+#        except ObjectDoesNotExist:
+#            pass
+        super(CourseTime, self).save()
+# EndClass
 class Instructor(models.Model):
     """ Data Model binding a User as an Instructor to Course object.
         Any Course can now have multiple Instructors.
