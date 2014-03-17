@@ -29,7 +29,7 @@
 <h3>{{ combo.0.name}}</h3>
 {# List course details with hidden form for enrollment #}
 <form action="/student/open_enrollments/" method="post">{% csrf_token %}
-<div style='display:none'><input type="hidden" name="course" value="{{ course.id }}"></input></div>
+<div style='display:none'><input type="hidden" name="course" value="{{ combo.0.id }}"></input></div>
 <table cellspacing='0' class="resourceinfo">
 <tr>
    <td><i>Description:</i>  {{ combo.0.description }}</td>
