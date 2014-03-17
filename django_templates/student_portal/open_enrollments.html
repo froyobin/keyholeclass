@@ -24,21 +24,25 @@
 
 {# List Open Enrollment Courses #}
 {% if courses %}
-{% for course in courses %}
+{% for combo in courses %}
 {# Create a course entry with enrollment option #}
-<h3>{{ course.name}}</h3>
+<h3>{{ combo.0.name}}</h3>
 {# List course details with hidden form for enrollment #}
 <form action="/student/open_enrollments/" method="post">{% csrf_token %}
 <div style='display:none'><input type="hidden" name="course" value="{{ course.id }}"></input></div>
 <table cellspacing='0' class="resourceinfo">
 <tr>
-   <td><i>Description:</i>  {{ course.description }}</td>
+   <td><i>Description:</i>  {{ combo.0.description }}</td>
 </tr>
+{% for st in combo.1 %}
+<tr>
+   <td><i>Start Date:</i>  {{ st}}</td>
+</tr>
+{% endfor %}
 <tr>
    <td><input type="submit" value="Enroll in this course!" /></td>
 </tr>
 </table>
-
 </form>
 {% endfor %}
 {# In case there are no courses #}

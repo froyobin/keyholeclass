@@ -68,13 +68,27 @@ def open_enrollments(request):
 
     # Exclude listing any courses where User already has Enrollment
     course_list = []
+    ctime=[]
+    dic_days={'1':'Monday','2':'Tuesday','3':'Wednesday','4':'Thursday','5':'Friday','6':'Saturday','7':'Sunday'}
+    dic_time={'1':'8:00-10:00','2':'10:30-12:30','3':'13:30-15:30','4':'16:00-18:00'}
     for course in courses:
+        combo = []
+        ctime=[]
         add_course = 1
         for enrollment in enrollments:
             if course == enrollment.course:
                 add_course = 0
         if add_course:
-            course_list.append(course)
+    ##yubin add##
+            course_time = CourseTime.objects.all().filter(Coursename=course).values()
+            for one in course_time:
+
+                sendstirng = str(one['Coursestart_date'])+'~'+str(one['Courseend_date'])+"\n Week: "+dic_days[one['Dayofweek']]+"\n at: "+dic_time[one['TimeofDay']]
+                ctime.append(sendstirng)
+            logger.error(ctime)
+            combo.append(course)
+            combo.append(ctime)
+            course_list.append(combo)
 
     # Specify template, generate context, and return response
     template = loader.get_template('student_portal/open_enrollments.html')
