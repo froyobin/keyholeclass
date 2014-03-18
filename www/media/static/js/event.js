@@ -267,7 +267,13 @@ function showModalDialog(day,beginTime,endTime){
                     case 4:  strday = "16:00-18:00";break;
                 }
                 this.content2=_create('tr');
-                    this.content2.innerHTML="<td>"+handle_data[pos].coursename+"</td><td>"+start_date+"</td><td>"+end_date+"</td><td>"+strday+"</td>";
+
+
+       coursename_link = '<a href="/student/courseindex/'+handle_data[pos].courseid+'/">'+handle_data[pos].coursename+'</a>';
+
+
+                    this.content2.innerHTML="<td>"+coursename_link+"</td><td>"+start_date+"</td><td>"+end_date+"</td><td>"+strday+"</td>";
+                    //this.content2.innerHTML="<td>"+handle_data[pos].coursename+"</td><td>"+start_date+"</td><td>"+end_date+"</td><td>"+strday+"</td>";
                 this.table.appendChild(this.content2);
             }
         }

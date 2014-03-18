@@ -225,7 +225,10 @@ table.CourseList {
     border-spacing: 0px;
     border-collapse: collapse;
     border-top: 4px solid #EA9A1C;
-    border-bottom: 1px solid #EA9A1C; }
+    border-bottom: 1px solid #EA9A1C; 
+    margin:auto;
+    font-size:20px;
+}
 table.CourseList th {
     text-align: left;
     font-weight: bold;
