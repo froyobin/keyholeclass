@@ -976,6 +976,28 @@ margin-right:5px;
 	border:5px solid #999;
 }
 .dialog .bar{ padding:5px; background:#2B72D0; color:#fff;}
+.dialog .table{ 
+    border-spacing: 0px;
+    border-collapse: collapse;
+    border-top: 4px solid #EA9A1C;
+    border-bottom: 1px solid #EA9A1C; 
+    margin:auto;
+}
+.dialog .table th {
+    text-align: left;
+    font-weight: bold;
+    padding: 0.2em 0.5em;
+    border-top: 1px dotted #EA9A1C; }
+.dialog .table td {
+    text-align: center;
+    border-top: 1px dotted #EA9A1C;
+    padding: 0.2em 0.5em; 
+    border-left: 2px dotted #EA9A1C;
+    border-right: 2px dotted #EA9A1C;
+
+}
+
+
 .dialog form{ padding:10px;}
 .dialog input[type='text'],textarea{
 	width:97%;

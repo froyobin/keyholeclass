@@ -29,13 +29,11 @@ def index(request):
     """
     # Get all enrollments for the current user
     course_info_list=[]
-    course_info_dic={'coursename':'','courseid':''}
     enrollments = Enrollment.objects.all().filter(student=request.user).select_related().order_by('course')
     for one in enrollments:
-        #course_info_list.append(one.id)
+        course_info_dic={'coursename':'','courseid':''}
         course_info_dic['courseid']=one.id
         course_info_dic['coursename']=one.course.name
-        #course_info_list.append(one.course.name)
         course_time = CourseTime.objects.all().filter(Coursename=one.course)
         ctime_list=[]
         for cone in course_time:
@@ -57,7 +55,6 @@ def index(request):
             ctime_list.append(ctime_dic)
         course_info_dic['coursetime']=ctime_list
         course_info_list.append(course_info_dic)
-    #logger.error(course_info_list)
     #logger.error(course_info_list)
 
     # Get all global announcements ordered by date

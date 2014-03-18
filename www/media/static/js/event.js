@@ -213,35 +213,65 @@ function showModalDialog(day,beginTime,endTime){
 	this.header=_create('div');
 	this.closeimg=_create('div');
 	this.bar=_create('div');
+    var me=document.getElementById('month.js').getAttribute('courseinfo');
+    var handle_data = eval(me);
 	
 	var lang=new Language(_('hidden_language').value);
 	
-	this.dialog.style.top=(getWinHeight()/2-120)+'px';
+	this.dialog.style.top=(getWinHeight()/2+220)+'px';
 	this.dialog.style.left=(getWinWidth()/2-200)+'px';
 	this.closeimg.className='close';
-	this.closeimg.innerHTML="<img onclick=closeModalDialog("+day+") src='images/close2.gif'>";
+	this.closeimg.innerHTML="<img onclick=closeModalDialog("+day+") src='/media/static/images/close2.gif'>";
 	this.bar.className='bar';
+    lang.event = "Course Detail"
 	this.bar.innerHTML=lang.event;
 	this.form=_create('form');
-	this.time=_create('div');
-	this.title=_create('div');
-	this.content=_create('div');
+    //this.time=_create('div');
+	//this.title=_create('div');
+    this.table = _create('table');
+    this.table.className='table';
+	this.content=_create('tr');
+    var contentarr = new Array();
+    var strday="abc";
 	this.btu=_create('div');
 	var date=new Date(day);
+	//alert(day)
+	//this.time.innerHTML=lang.date+' '+date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+" ("
+	//					+lang.weekArray[date.getDay()]+"),  "+Time_hm[beginTime]+" – "+Time_hm[endTime];
+	//this.title.innerHTML="<p>"+lang.title+":</p> <input type='text'>";
+	this.content.innerHTML="<td>Course Name</td><td>Start Date</td><td>End Date</td><td>Time</td>";
+  //  this.content2.innerHTML="<td>Course Name</td><td>Start Date</td><td>End Date</td><td>Day of Week</td><td>Time</td>";
 	
-	this.time.innerHTML=lang.date+' '+date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+" ("
-						+lang.weekArray[date.getDay()]+"),  "+Time_hm[beginTime]+" – "+Time_hm[endTime];
-	this.title.innerHTML="<p>"+lang.title+":</p> <input type='text'>";
-	this.content.innerHTML="<p>"+lang.content+":</p> <textarea></textarea> <hr />";
-	this.btu.innerHTML="<input type='button' value='"+lang.create_action
-					   +"' onclick='closeModalDialog()' /> <a>"+lang.edit_detail+"</a>";
+    
+    
+    
+    this.btu.innerHTML="<input type='button' value='"+"Close"
+					   +"' onclick='closeModalDialog()' /> <a>";
 					   
 		 
 	this.dialog.appendChild(this.bar);
 	this.dialog.appendChild(this.closeimg);
-	this.form.appendChild(this.time);
-	this.form.appendChild(this.title);
-	this.form.appendChild(this.content);
+	this.form.appendChild(this.table);
+	this.table.appendChild(this.content);
+    length = handle_data.length;
+    for (var pos=0;pos<length;pos++){
+        for (var timepos=0;timepos<handle_data[pos].coursetime.length;timepos++){
+            if (handle_data[pos].coursetime[timepos].dayofweek == date.getDay()){
+                start_date = handle_data[pos].coursetime[timepos].start_date.year+'/'+handle_data[pos].coursetime[timepos].start_date.month+'/'+handle_data[pos].coursetime[timepos].start_date.day;
+                end_date = handle_data[pos].coursetime[timepos].end_date.year+'/'+handle_data[pos].coursetime[timepos].end_date.month+'/'+handle_data[pos].coursetime[timepos].end_date.day;
+                switch (parseInt(handle_data[pos].coursetime[timepos].timeofday))
+                {
+                    case 1:  strday = "8:00-10:00" ;break;
+                    case 2:  strday = "10:30-12:30";break;
+                    case 3:  strday = "13:30-15:30";break;
+                    case 4:  strday = "16:00-18:00";break;
+                }
+                this.content2=_create('tr');
+                    this.content2.innerHTML="<td>"+handle_data[pos].coursename+"</td><td>"+start_date+"</td><td>"+end_date+"</td><td>"+strday+"</td>";
+                this.table.appendChild(this.content2);
+            }
+        }
+    }
 	this.form.appendChild(this.btu);
 	this.dialog.appendChild(this.form);
 	_('append').appendChild(this.dialog);
