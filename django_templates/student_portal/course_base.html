@@ -1,7 +1,7 @@
 {% extends "student_portal/loggedin_base.html" %}
 
 {% block menuitems %}
-<li><a href="/student/welcome/">Welcome</a></li>
+<li><a href="/student/welcome/?mode=month">Welcome</a></li>
 <li><a href="/student/courseindex/{{ enrollment.id }}/index.html">Course Home</a></li>
 <li><a href="/student/courseindex/{{ enrollment.id }}/assignments.html">Course Assignments</a></li>
 <li><a href="/student/courseindex/{{ enrollment.id }}/information.html">Course Information</a></li>

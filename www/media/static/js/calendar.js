@@ -75,17 +75,17 @@ Calendar.prototype.tool=function(){
 		this.day_a.className='selectTab';
 	}
 	
-	this.year_a.innerHTML=this.language.year;
+	//this.year_a.innerHTML=this.language.year;
 	this.month_a.innerHTML=this.language.month;
 	this.week_a.innerHTML=this.language.week;
 	this.day_a.innerHTML=this.language.day;
 	
-	this.year_a.href='year.html';
-	this.month_a.href='month.html';
-	this.week_a.href='week.html';
-	this.day_a.href='day.html';
+	//this.year_a.href='year.html';
+	this.month_a.href='index.html?mode=month';
+	this.week_a.href='index.html?mode=week';
+	this.day_a.href='index.html?mode=day';
 	
-	this.c_tl_tb_td_1.appendChild(this.year_a);
+	//this.c_tl_tb_td_1.appendChild(this.year_a);
 	this.c_tl_tb_td_1.appendChild(this.month_a);
 	this.c_tl_tb_td_1.appendChild(this.week_a);
 	this.c_tl_tb_td_1.appendChild(this.day_a);

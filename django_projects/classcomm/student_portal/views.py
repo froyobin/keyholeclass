@@ -28,6 +28,7 @@ def index(request):
 
     """
     # Get all enrollments for the current user
+    cal_mode = request.GET['mode']
     course_info_list=[]
     enrollments = Enrollment.objects.all().filter(student=request.user).select_related().order_by('course')
     for one in enrollments:
@@ -62,9 +63,9 @@ def index(request):
 
     # Specify template, generate context, and return response
     coursejson = json.dumps(course_info_list)
-    logger.error(coursejson)
+    #logger.error(coursejson)
     template = loader.get_template('student_portal/index.html')
-    context = RequestContext(request, {"enrollments": enrollments, "announcements": announcements,"courseinfo":coursejson})
+    context = RequestContext(request, {"calmode":cal_mode,"enrollments": enrollments, "announcements": announcements,"courseinfo":coursejson})
     return HttpResponse(template.render(context))
 # End Def
 
