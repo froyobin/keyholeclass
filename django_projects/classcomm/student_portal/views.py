@@ -1,4 +1,5 @@
 import logging
+import json
 logger = logging.getLogger('student_portal')
 
 from django.core.urlresolvers import reverse
@@ -27,14 +28,46 @@ def index(request):
 
     """
     # Get all enrollments for the current user
+    course_info_list=[]
+    course_info_dic={'coursename':'','courseid':''}
     enrollments = Enrollment.objects.all().filter(student=request.user).select_related().order_by('course')
+    for one in enrollments:
+        #course_info_list.append(one.id)
+        course_info_dic['courseid']=one.id
+        course_info_dic['coursename']=one.course.name
+        #course_info_list.append(one.course.name)
+        course_time = CourseTime.objects.all().filter(Coursename=one.course)
+        ctime_list=[]
+        for cone in course_time:
+            ctime_detail=[]
+            date_dic={'year':'','month':'','day':''}
+            date_dic2={'year':'','month':'','day':''}
+            ctime_dic={'start_date':'','end_date':'','dayofweek':'','timeofday':''}
+            date_dic2['year']=cone.Coursestart_date.year
+            date_dic2['month']=cone.Coursestart_date.month
+            date_dic2['day']=cone.Coursestart_date.day
+            ctime_dic['start_date']= date_dic2
+                
+            date_dic['year']=cone.Courseend_date.year
+            date_dic['month']=cone.Courseend_date.month
+            date_dic['day']=cone.Courseend_date.day
+            ctime_dic['end_date']= date_dic
+            ctime_dic['dayofweek']=cone.Dayofweek
+            ctime_dic['timeofday']=cone.TimeofDay
+            ctime_list.append(ctime_dic)
+        course_info_dic['coursetime']=ctime_list
+        course_info_list.append(course_info_dic)
+    #logger.error(course_info_list)
+    #logger.error(course_info_list)
 
     # Get all global announcements ordered by date
     announcements = Announcement.objects.all().filter(make_global=1).select_related('author').order_by('-pub_date')
 
     # Specify template, generate context, and return response
+    coursejson = json.dumps(course_info_list)
+    logger.error(coursejson)
     template = loader.get_template('student_portal/index.html')
-    context = RequestContext(request, {"enrollments": enrollments, "announcements": announcements})
+    context = RequestContext(request, {"enrollments": enrollments, "announcements": announcements,"courseinfo":coursejson})
     return HttpResponse(template.render(context))
 # End Def
 

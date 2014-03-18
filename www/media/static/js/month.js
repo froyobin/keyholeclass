@@ -79,7 +79,7 @@ var GridList=function(date,language){
 	this.day=0;  //1-31天
 		
 	this.date=new Date(date.format("MM/01/yyyy")); 
-	this.w=this.date.getDay();
+	this.w=this.date.getDay();//where day of the first day
 	this.year=this.date.getFullYear();
 	this.month=this.date.getMonth();
 	this.days=0;
@@ -88,8 +88,13 @@ var GridList=function(date,language){
 	this.ndate=new Date();
 	
 	var H=parseInt(400)/5;
-	
-	for(var i=0;i<6;i++){
+    //watch out!!!
+    if(this.w>=5&&this.days>=30){
+        var myi=7;
+    }else{
+        var myi=6;
+    }
+	for(var i=0;i<myi;i++){
 		this.c_g_tr=_create('tr');
 		
 		if(i==0){
@@ -145,6 +150,37 @@ var Grid_td=function(language,year,month,day,date,ndate,i,j,w,days){
 			var lunar=lunarday((month+1)+'//'+day+'//'+year);
 			var lunarhtml="&nbsp;&nbsp;<font color='#777' style='font-size:8px'>"+lunar+"</font>";
 		}
+        //ADD YUBIN j is the week of day
+	   // if (day == 26){
+        var me=document.getElementById('month.js').getAttribute('courseinfo');
+        var handle_data = eval(me);
+        //alert(me)
+        length = handle_data.length
+        for (var pos=0;pos<length;pos++){
+            for (var timepos=0;timepos<handle_data[pos].coursetime.length;timepos++){
+                var date_start = new Date()
+                var date_end = new Date()
+                var compare = new Date()
+                year_s = (handle_data[pos].coursetime[timepos].start_date.year);
+                month_s =(handle_data[pos].coursetime[timepos].start_date.month);
+                day_s = (handle_data[pos].coursetime[timepos].start_date.day);
+                year_e = (handle_data[pos].coursetime[timepos].end_date.year);
+                month_e = (handle_data[pos].coursetime[timepos].end_date.month);
+                day_e = (handle_data[pos].coursetime[timepos].end_date.day);
+                date_start.setFullYear(year_s,month_s,day_s)
+                date_end.setFullYear(year_e,month_e,day_e)
+                compare.setFullYear(year,month+1,day)
+                if(compare>=date_start&&compare<=date_end)
+                {
+                    if (handle_data[pos].coursetime[timepos].dayofweek == j)
+                        this.c_g_td.className+=" hscourse"; 
+                    
+                }
+            }
+        }
+        //}
+        
+
 		this.c_g_td.id='day_'+day;
 		var g="<div class='day_d' ><a class='day_num'>"+day+"</a>"+lunarhtml+
 		"</font><a class='add_event'  id='add_"+day+
@@ -153,13 +189,6 @@ var Grid_td=function(language,year,month,day,date,ndate,i,j,w,days){
 		var g=" "
 		this.c_g_td.style.background='#eeeeee'; 
 	}
-	if (day == 26){
-//_('day_'+day).addClass('day_pc');
-  //      _("add_"+day).style.display='block';
-        //get_day(day);
-		this.c_g_td.className+=" hscourse"; 
-        alert(month)
-    }
 	addEvents(this.c_g_td,'click',function(){get_day(day)});
 	this.day=day;
 	
