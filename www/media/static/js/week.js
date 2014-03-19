@@ -142,7 +142,7 @@ var GridList=function(date,language){
 		this.c_g_tr_td_slot_div=_create('div');
 		this.c_g_tr_td_slot_div.className='wc-time-slots';
 		
-		for(var i=1;i<=48;i++){
+		for(var i=1;i<=32;i++){
 			var slot_div_i=new Slot_div_i();
 			if(i%2==0){
 				slot_div_i.className='wc-time-slot wc-hour-end';	
@@ -156,12 +156,12 @@ var GridList=function(date,language){
 		this.c_g_tr_b_td_time.style.width='6%';
 		this.c_g_tr_b_td_time.style.backgroundColor='#eee';
 		
-		for(var i=1;i<=24;i++){
+		for(var i=6;i<=21;i++){
 			this.time_l=_create('div');
 			if(i>=9&&i<=18){
 					this.time_l.className='wc-hour-header wc-business-hours';
 			}else{
-					this.time_l.className='wc-hour-header';
+					this.time_l.className='wc-hour-header wc-business-hours';
 			}
 			this.time_l_v=_create('div');
 			this.time_l_v.style.height='39px';
@@ -262,12 +262,12 @@ var color_me=function(coursetime,day,frame,coursename,courseid){
         {
             case 1:  start=8;delta=2;strday = "8:00-10:00";break;
             case 2:  start=10.5;delta=2;strday = "10:30-12:30";break;
-            case 3:  start=12.5;delta=2;strday = "13:30-15:30";break;
+            case 3:  start=13.5;delta=2;strday = "13:30-15:30";break;
             case 4:  start=16;delta=2;strday = "16:00-18:00";break;
         }
 
-        var y= (7*6*start).toString();
-        var height = (7*delta*6).toString();//each 10 minutes is 7 
+        var y= ((120*(start-5))/3).toString();
+        var height = ((delta*120)/3).toString();//each hour 40
         this.event_div.style.top=y +'px';
         this.event_div.style.height= height+'px';
         var date=new Date(day);
@@ -315,7 +315,7 @@ var Slot_div_j=function(date,handle_data,j){
 	
 	this.slot_div_j=_create('div');
 	this.slot_div_j.className='wc-day-column-inner';
-	this.slot_div_j.style.height='960px';
+	this.slot_div_j.style.height='640px';
 	this.slot_div_j.id=dateMDY+'_week';
 	
     length = handle_data.length
