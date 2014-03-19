@@ -42,7 +42,7 @@ clear: both;
 #header .serverTime {
     font-size: .9em; }
 #frontphoto {
-    margin: 0 0 60px 0;
+    margin:auto;
     border: 0; }
 
 /**** Main Content Styling ****/

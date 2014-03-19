@@ -14,8 +14,8 @@ Calendar.prototype.header=function(){
 	this.c_h_tb.border='0';
 	this.c_h_tb_td_l.className='HeaderLeft';
 	this.c_h_tb_td_r.className='HeaderRight';
-	this.c_h_tb_td_img.src='{{STATIC_URL}}images/Spacer.gif';
-	this.c_h_tb_td_img2.src='{{STATIC_URL}}images/Spacer.gif';
+	this.c_h_tb_td_img.src='/media/static/images/Spacer.gif';
+	this.c_h_tb_td_img2.src='/media/static/images/Spacer.gif';
 	this.c_h_tb_td_c.className='tbg';
 	
 	this.hid=_create('input');
@@ -182,6 +182,8 @@ var GridList=function(date,language){
 		
 		//当前系统时间
 		var currentDate=new Date();
+        var me=document.getElementById('week.js').getAttribute('courseinfo');
+        var handle_data = eval(me);
 	
 		
 		for(var j=0;j<7;j++){
@@ -190,7 +192,7 @@ var GridList=function(date,language){
 
 			var l_date=addDays(date,j);
 			
-			this.c_g_tr_b_td_slot.appendChild(new Slot_div_j(l_date));
+			this.c_g_tr_b_td_slot.appendChild(new Slot_div_j(l_date,handle_data,j));
 			this.c_g_tr_b_td_slot.id=l_date.format("yyyyMMdd")+'_td';
 			
 			if(currentDate.getFullYear()==l_date.getFullYear()
@@ -200,6 +202,9 @@ var GridList=function(date,language){
 				this.c_g_tr_b_td_slot.className+=' today'; 
 			}
 			
+
+
+
 			this.c_g_tr_b.appendChild(this.c_g_tr_b_td_slot);
 		}
 		this.c_g_tr_td_slot_d.appendChild(this.c_g_tr_td_slot_div);
@@ -211,25 +216,101 @@ var GridList=function(date,language){
 	
 	this.c_g_tb.appendChild(this.c_g_tbody);
 	this.c_g_div.appendChild(this.c_g_tb);
+
+
+    
+
+
+
+
 	return this.c_g_div;	
 }
 
-var Slot_div_i=function(){
-	this.slot_div_i=_create('div');
-	
-	if (window.XMLHttpRequest&&!window.ActiveXObject) { 
-		this.slot_div_i.style.height='19px';	
-	}else{
-		this.slot_div_i.style.height='19px';
-	}
-	
-	return this.slot_div_i;
+var color_me=function(coursetime,day,frame,coursename,courseid){
+    //alert(value)
+			
+    //state_obj=false;  
+    //down=true;       
+    current_date=day;
+
+   // var isdownObj=false;  //是否是按下的对象
+
+
+    this.event_div=_create('div');
+    this.event_time_div=_create('div');
+    this.event_content_div=_create('div');
+    this.resize_div=_create('div');
+
+    this.event_div.className='wc-cal-event ui-corner-all br4';			   
+    this.event_time_div.className='wc-time ui-corner-all br4';
+    this.resize_div.className='ui-resizable-handle ui-resizable-s';	
+
+
+    //m=getOffsetY(event);
+
+    //y=parseInt(getOffsetY(event)/20)*20;
+   // t=parseInt(getOffsetY(event)/20)+1;
+   // current_obj=getEventObj(event);
+   // if(getEventObj(event)==_(day+'_week')){
+    //    isdownObj=true;
+     //   is_current_obj=true;
+   // }
+        var start=0;
+        var delta=0;
+        var strday='abc';
+        switch (parseInt(coursetime))
+        {
+            case 1:  start=8;delta=2;strday = "8:00-10:00";break;
+            case 2:  start=10.5;delta=2;strday = "10:30-12:30";break;
+            case 3:  start=12.5;delta=2;strday = "13:30-15:30";break;
+            case 4:  start=16;delta=2;strday = "16:00-18:00";break;
+        }
+
+        var y= (7*6*start).toString();
+        var height = (7*delta*6).toString();//each 10 minutes is 7 
+        this.event_div.style.top=y +'px';
+        this.event_div.style.height= height+'px';
+        var date=new Date(day);
+        var d=new Date();
+
+        var ndate=new Date((d.getMonth()+1)+'/'+d.getDate()+'/'+d.getFullYear());
+        if(!(date>=ndate)){
+            this.event_div.style.backgroundColor ='#aaa';
+        }
+       coursename_link = '<a href="/student/courseindex/'+courseid+'/">'+coursename+'</a>';
+
+        this.event_div.id=day+''+y+'_event_div';
+        this.event_time_div.id=day+''+y+'_event_time';
+        this.event_time_div.innerHTML = strday;
+        this.event_content_div.id=day+''+y+'_event_content';
+        this.event_content_div.innerHTML=coursename_link;
+        this.event_div.appendChild(this.event_time_div);
+        this.event_div.appendChild(this.event_content_div);
+        //addEvents(this.resize_div,'mousedown',function(event){resize_downEvent(day,event); });
+        this.event_div.appendChild(this.resize_div);
+
+        frame.appendChild(this.event_div);
+
 }
 
 
 
-var Slot_div_j=function(date){
-	
+var Slot_div_i=function(){
+    this.slot_div_i=_create('div');
+
+    if (window.XMLHttpRequest&&!window.ActiveXObject) { 
+        this.slot_div_i.style.height='19px';	
+    }else{
+        this.slot_div_i.style.height='19px';
+    }
+
+    return this.slot_div_i;
+}
+
+
+
+var Slot_div_j=function(date,handle_data,j){
+	var l_date = date;
 	var dateMDY=date.format("MM/dd/yyyy");
 	
 	this.slot_div_j=_create('div');
@@ -237,10 +318,36 @@ var Slot_div_j=function(date){
 	this.slot_div_j.style.height='960px';
 	this.slot_div_j.id=dateMDY+'_week';
 	
+    length = handle_data.length
+        for (var pos=0;pos<length;pos++){
+            for (var timepos=0;timepos<handle_data[pos].coursetime.length;timepos++){
+                var date_start = new Date()
+                    var date_end = new Date()
+                    var compare = new Date()
+                    year_s = (handle_data[pos].coursetime[timepos].start_date.year);
+                month_s =(handle_data[pos].coursetime[timepos].start_date.month);
+                day_s = (handle_data[pos].coursetime[timepos].start_date.day);
+                year_e = (handle_data[pos].coursetime[timepos].end_date.year);
+                month_e = (handle_data[pos].coursetime[timepos].end_date.month);
+                day_e = (handle_data[pos].coursetime[timepos].end_date.day);
+                date_start.setFullYear(year_s,month_s,day_s)
+                    date_end.setFullYear(year_e,month_e,day_e)
+                    compare.setFullYear(l_date.getFullYear(),l_date.getMonth()+1,l_date.getDate())
+                    if(compare>=date_start&&compare<=date_end)
+                    {
+                        var timecourse = handle_data[pos].coursetime[timepos];
+                        if (timecourse.dayofweek == j){
+                            var dateMDY=date.format("MM/dd/yyyy");
+                            color_me(timecourse.timeofday,dateMDY,this.slot_div_j,handle_data[pos].coursename,handle_data[pos].courseid);
+                        }
+
+                    }
+            }
+        }
 	//添加事件
-	addEvents(this.slot_div_j,'mousedown',function(event){downEvent(dateMDY,event); });
-	addEvents(this.slot_div_j,'mousemove',function(event){moveEvent(dateMDY,event)});
-	addEvents(this.slot_div_j,'mouseup',function(event){upEvent(dateMDY,event)});
+	//addEvents(this.slot_div_j,'mousedown',function(event){downEvent(dateMDY,event); });
+	//addEvents(this.slot_div_j,'mousemove',function(event){moveEvent(dateMDY,event)});
+	//addEvents(this.slot_div_j,'mouseup',function(event){upEvent(dateMDY,event)});
 	
 	//addEvents(this.slot_div_j,'mouseover',function(event){overEvent(dateMDY,event)});
 	//addEvents(this.slot_div_j,'mouseout',function(event){outEvent(dateMDY,event)});

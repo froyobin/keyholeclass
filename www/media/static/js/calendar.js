@@ -83,12 +83,12 @@ Calendar.prototype.tool=function(){
 	//this.year_a.href='year.html';
 	this.month_a.href='index.html?mode=month';
 	this.week_a.href='index.html?mode=week';
-	this.day_a.href='index.html?mode=day';
+	//this.day_a.href='index.html?mode=day';
 	
 	//this.c_tl_tb_td_1.appendChild(this.year_a);
 	this.c_tl_tb_td_1.appendChild(this.month_a);
 	this.c_tl_tb_td_1.appendChild(this.week_a);
-	this.c_tl_tb_td_1.appendChild(this.day_a);
+	//this.c_tl_tb_td_1.appendChild(this.day_a);
 	this.c_tl_tb_td_2.appendChild(this.prevMonth_div);
 	this.c_tl_tb_td_2.appendChild(this.nextMonth_div);
 	this.c_tl_tb_td_2.appendChild(this.language_input);

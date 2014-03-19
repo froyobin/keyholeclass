@@ -166,7 +166,7 @@ td {
 	font-size: 80%; 	text-align: left; vertical-align: top;
 	padding: 4px;
 	border-top: 1px solid #3d84cc; border-right: 1px solid #3d84cc;
-	background-image: url('images/CaptionBg.gif'); color: #000000;
+	background-image: url('/media/static/images/CaptionBg.gif'); color: #000000;
 	white-space: nowrap;
 	}
 
@@ -174,7 +174,7 @@ td {
 	font-size: 80%; 	text-align: left; vertical-align: top;
 	padding: 4px;
 	border-top: 1px solid #3d84cc; border-right: 1px solid #3d84cc;
-	background-image: url('images/CaptionBg.gif'); color: #000000;
+	background-image: url('/media/static/images/CaptionBg.gif'); color: #000000;
 	white-space: nowrap;
 	}
 

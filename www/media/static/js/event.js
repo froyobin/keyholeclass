@@ -207,7 +207,7 @@ window.onresize=function(){
 }
 
 function showModalDialog(day,beginTime,endTime){
-	createBlackBg();
+	//createBlackBg();
 	this.dialog=_create('div');	
 	this.dialog.className='dialog bs br10';
 	this.header=_create('div');
