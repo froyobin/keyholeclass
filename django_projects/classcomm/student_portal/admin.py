@@ -77,6 +77,15 @@ class CourseAdmin(admin.ModelAdmin):
     )
     inlines = [CourseTime,InstructorInline, MentorInline, AssignmentInline]
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'director':
+            userrole=[]
+            value=[]
+            userrole = extraInfo.objects.filter(roles='2')
+            for i in userrole:
+                value.append(i.user_id)
+            kwargs['queryset'] = User.objects.all().filter(id__in=value).select_related()
+        return super(CourseAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
     def queryset(self, request):
         """ Taylor queryset for request.user's active Classcomm roles. """
         if request.user.is_superuser:
@@ -564,23 +573,60 @@ class UserAdmin(UserAdmin):
 
 class StudentInfoAdmin(admin.ModelAdmin):
     model = extraInfo
-    list_display = ['User', 'others']
-    list_filter = ['User', 'others']
+    list_display = ['Studentnumber','User','cName','cPname','ContactNumber','Email','SchoolBranch']
+    list_filter = ['Studentnumber','cName']
     list_select_related = True
+    search_fields = ['Studentnumber','cName']
+#    fieldsets = (
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        #kwargs["queryset"] = Course.objects.all().filter(Q(director=request.user) |
-    #    logger.error(db_field.name)
         userrole=[]
         value=[]
         userrole = extraInfo.objects.filter(roles='1')
-        logger.error(userrole[0].user_id)
         for i in userrole:
             value.append(i.user_id)
         kwargs['queryset'] = User.objects.all().filter(id__in=value).select_related()
-        #logger.error(list(kwargs['queryset']))
-    #    if db_field.name == "author":
-        #logger.error(list(kwargs['queryset']))
         return super(StudentInfoAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+
+
+class StaffInfoAdmin(admin.ModelAdmin):
+    model = StaffInfo
+    list_display = ['User','Name','cName','ContactNumber','Email','SchoolBranch']
+    list_filter = ['Name','cName']
+    list_select_related = True
+    search_fields = ['Name','cName']
+#    fieldsets = (
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        userrole=[]
+        value=[]
+        fil=['2','4','5','6','7','8']
+        userrole = extraInfo.objects.filter(roles__in=fil)
+        for i in userrole:
+            value.append(i.user_id)
+        kwargs['queryset'] = User.objects.all().filter(id__in=value).select_related()
+        return super(StaffInfoAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+
+
+class PStudentInfoAdmin(admin.ModelAdmin):
+    model = PotentialStudent
+    list_display = ['Name','User','cName','ContactNumber','Email']
+    list_filter = ['Name','cName']
+    list_select_related = True
+    search_fields = ['Name','cName']
+#    fieldsets = (
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        userrole=[]
+        value=[]
+        userrole = extraInfo.objects.filter(roles='3')
+        for i in userrole:
+            value.append(i.user_id)
+        kwargs['queryset'] = User.objects.all().filter(id__in=value).select_related()
+        return super(PStudentInfoAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+
 # Now register ALL of our ModelAdmins with the admin.site
 admin.site.register(Department, DepartmentAdmin)
 admin.site.register(Course, CourseAdmin)
@@ -596,6 +642,8 @@ admin.site.register(ExtraCredit, ExtraCreditAdmin)
 admin.site.register(Information, InformationAdmin)
 admin.site.register(Resource, ResourceAdmin)
 admin.site.register(Announcement, AnnouncementAdmin)
+admin.site.register(StaffInfo, StaffInfoAdmin)
+admin.site.register(PotentialStudent, PStudentInfoAdmin)
 admin.site.unregister(User)
 admin.site.register(User,UserAdmin)
 

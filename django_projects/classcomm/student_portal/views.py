@@ -28,6 +28,17 @@ def index(request):
 
     """
     # Get all enrollments for the current user
+    # first of all verity user id
+    user_access = User.objects.all().filter(username=request.user).values()
+    uid = user_access[0]['id']
+    #logger.error(uid)
+    user_role = extraInfo.objects.all().filter(user=uid).values()[0]['roles']
+    if user_role != '1':
+
+        template = loader.get_template('student_portal/login_blocked.html')
+        context = RequestContext(request, {"access_flag": -1})
+        return HttpResponse(template.render(context))
+    # end
     cal_mode = request.GET['mode']
     course_info_list=[]
     enrollments = Enrollment.objects.all().filter(student=request.user).select_related().order_by('course')

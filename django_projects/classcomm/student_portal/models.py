@@ -593,12 +593,60 @@ class Announcement(models.Model):
 # EndClass
 
 class extraInfo(models.Model):
-    ROLES = (('1','STUDENT'),('2','STAFF'),('3','POTENCIAL STUDENT'))
+    ROLES = (('1','STUDENT'),('2','TEACHERS'),('3','POTENCIAL STUDENT'),('4','MANAGER'),('5','COORDINATOR'),('6','ADVISOR'),('7','SALE MANAGER'),('8','MARKING'))
     user = models.OneToOneField(User)
-    roles = models.CharField(max_length=1,choices=ROLES,blank=False,null=True)
+    roles = models.CharField(max_length=2,choices=ROLES,blank=False,null=True)
 
 #EndClass
 class StudentInfo(models.Model):
-    User = models.ForeignKey(User, verbose_name='Name', null=True, blank=False)
-    others = models.CharField(max_length=100)
+    User = models.ForeignKey(User, verbose_name='ID', null=True, blank=False)
+    cName = models.CharField('Chinese Name',max_length=100)
+    cPname = models.CharField('Parent name',max_length=100)
+    age = models.IntegerField('Age',default=0)
+    ContactNumber = models.CharField('Contract number',max_length=30)
+    Email = models.EmailField('Email address')
+    CSTDate = models.DateField('Contract start date')
+    CENDate = models.DateField('Contract end date') 
+    LevelS = models.CharField('Level start',max_length=10)
+    Levele = models.CharField('Level ends',max_length = 10)
+    TotalMony = models.FloatField('Total money paid')
+    SchoolBranch = models.CharField('School Branch code',max_length=100)
+    Studentnumber = models.CharField('Student number',max_length=100)
+    prograssLog = models.TextField('student prograss log')
+
+    def __unicode__(self):
+        return u'%s %s %s' % (self.cName,self.cPname,self.prograssLog)
+    
 #EndClass
+
+class StaffInfo(models.Model):
+    User = models.ForeignKey(User, verbose_name='ID', null=True, blank=False)
+    Name = models.CharField('Name',max_length=100)
+    cName = models.CharField('Chinese Name',max_length=100)
+    Email = models.EmailField('Email address')
+    ContactNumber = models.CharField('Contract number',max_length=30)
+    position = models.CharField('position',max_length=20)
+    SchoolBranch = models.CharField('School Branch code',max_length=100)
+
+
+    def __unicode__(self):
+        return u'%s' % (self.cName)
+#EndClass
+
+
+class PotentialStudent(models.Model):
+    User = models.ForeignKey(User, verbose_name='ID', null=True, blank=False)
+    Name = models.CharField('Name',max_length=100)
+    cName = models.CharField('Chinese Name',max_length=100)
+    ContactNumber = models.CharField('Contract number',max_length=30)
+    Email = models.EmailField('Email address')
+    OtherInfor = models.TextField('student other info')
+    DateContact = models.DateField('Contact Date')
+    ContactLog = models.TextField('Other info')
+    def __unicode__(self):
+        return u'%s %s %s' % (self.cName,self.OtherInfor,self.ContactLog)
+
+#EndClass
+    
+
+
