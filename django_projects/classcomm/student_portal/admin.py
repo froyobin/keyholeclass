@@ -2,7 +2,11 @@ from classcomm.student_portal.models import *
 #from classcomm.student_portal.forms import *
 from classcomm.student_portal.forms import CourseAdminForm
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
 from django.db.models import Q
+import logging
+logger = logging.getLogger('student_portal')
 
 class CourseInline(admin.TabularInline):
     """ Course Inline Customization for Departments. """
@@ -549,10 +553,39 @@ def formfield_for_foreignkey_generic(db_field, request):
     return None
 #EndDef
 
+class extraInfoInline(admin.StackedInline):
+    model = extraInfo
+    can_delete = False
+    verbose_name_plural = 'user Role'
+
+class UserAdmin(UserAdmin):
+    inlines = (extraInfoInline,)
+
+
+class StudentInfoAdmin(admin.ModelAdmin):
+    model = extraInfo
+    list_display = ['User', 'others']
+    list_filter = ['User', 'others']
+    list_select_related = True
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        #kwargs["queryset"] = Course.objects.all().filter(Q(director=request.user) |
+    #    logger.error(db_field.name)
+        userrole=[]
+        value=[]
+        userrole = extraInfo.objects.filter(roles='1')
+        logger.error(userrole[0].user_id)
+        for i in userrole:
+            value.append(i.user_id)
+        kwargs['queryset'] = User.objects.all().filter(id__in=value).select_related()
+        #logger.error(list(kwargs['queryset']))
+    #    if db_field.name == "author":
+        #logger.error(list(kwargs['queryset']))
+        return super(StudentInfoAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 # Now register ALL of our ModelAdmins with the admin.site
 admin.site.register(Department, DepartmentAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Instructor, InstructorAdmin)
+admin.site.register(StudentInfo, StudentInfoAdmin)
 admin.site.register(Mentor, MentorAdmin)
 admin.site.register(Enrollment, EnrollmentAdmin)
 admin.site.register(Assignment, AssignmentAdmin)
@@ -563,6 +596,7 @@ admin.site.register(ExtraCredit, ExtraCreditAdmin)
 admin.site.register(Information, InformationAdmin)
 admin.site.register(Resource, ResourceAdmin)
 admin.site.register(Announcement, AnnouncementAdmin)
-
+admin.site.unregister(User)
+admin.site.register(User,UserAdmin)
 
 

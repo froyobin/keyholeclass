@@ -40,6 +40,10 @@ class Department(models.Model):
 # EndClass
 
 
+
+
+
+#EndClass
 class Course(models.Model):
     """ Data Model representing a Course in Classcomm.
         All Courses are contained by a Department and requires both name and description.
@@ -588,3 +592,13 @@ class Announcement(models.Model):
     # EndDef
 # EndClass
 
+class extraInfo(models.Model):
+    ROLES = (('1','STUDENT'),('2','STAFF'),('3','POTENCIAL STUDENT'))
+    user = models.OneToOneField(User)
+    roles = models.CharField(max_length=1,choices=ROLES,blank=False,null=True)
+
+#EndClass
+class StudentInfo(models.Model):
+    User = models.ForeignKey(User, verbose_name='Name', null=True, blank=False)
+    others = models.CharField(max_length=100)
+#EndClass
