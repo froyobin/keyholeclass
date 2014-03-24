@@ -268,8 +268,13 @@ function showModalDialog(day,beginTime,endTime){
                 }
                 this.content2=_create('tr');
 
-
-       coursename_link = '<a href="/student/courseindex/'+handle_data[pos].courseid+'/">'+handle_data[pos].coursename+'</a>';
+        var choose=document.getElementById('event').getAttribute('role');
+        if (choose == 'teacher'){
+            coursename_link = handle_data[pos].coursename
+        }
+        if (choose == 'student'){
+            coursename_link = '<a href="/student/courseindex/'+handle_data[pos].courseid+'/">'+handle_data[pos].coursename+'</a>';
+        }
 
 
                     this.content2.innerHTML="<td>"+coursename_link+"</td><td>"+start_date+"</td><td>"+end_date+"</td><td>"+strday+"</td>";

@@ -1,6 +1,5 @@
-{% extends "student_portal/loggedin_base.html" %}
+{% extends "instructor_portal/loggedin_base.html" %}
 
-{% load student_portal_extras %}
 
 {% block extrahead %}
 <script type="text/javascript" src="{{ STATIC_URL }}sorttable.js"></script>
@@ -10,7 +9,7 @@
 {% block content %}
 {# Course Enrollments #}
 <h3>Your courses in Calendar</h3>
-{% if enrollments %}
+{% if courseinfo %}
 {# Configure Table and print Header #}
 <script  src="{{STATIC_URL}}/js/common.js" type="text/javascript" ></script>
 <script  src="{{STATIC_URL}}js/language.js" type="text/javascript" ></script>
@@ -22,13 +21,12 @@
 <script  src="{{STATIC_URL}}js/lunar.js" type="text/javascript" ></script>
 <script id="config" type="text/javascript" mode="{{calmode}}">
         var me=document.getElementById('config').getAttribute('mode');
-        var rolevalue=document.getElementById('event').getAttribute('role');
         cal_config({
             date:new Date(),
             contextPath:'calendar',
             language:'english',
             mode:me,
-            role:rolevalue,
+            role:'teacher',
         })	
     </script>  
 

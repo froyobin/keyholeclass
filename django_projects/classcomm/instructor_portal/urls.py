@@ -17,6 +17,7 @@ urlpatterns = patterns('',
     (r'^$', 'instructor_portal.views.index'),
     (r'^index.html$', 'instructor_portal.views.index'),
     (r'^welcome/$', 'instructor_portal.views.index'),
+    (r'^calendar.html/$', 'instructor_portal.views.calendar'),
     # Announcements
     (r'^courseindex/(\d{1,5})/$',
         'instructor_portal.views.course_index'),

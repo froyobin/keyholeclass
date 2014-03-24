@@ -76,7 +76,7 @@ def index(request):
     coursejson = json.dumps(course_info_list)
     #logger.error(coursejson)
     template = loader.get_template('student_portal/index.html')
-    context = RequestContext(request, {"calmode":cal_mode,"enrollments": enrollments, "announcements": announcements,"courseinfo":coursejson})
+    context = RequestContext(request, {"calmode":cal_mode,"enrollments": enrollments, "announcements": announcements,"courseinfo":coursejson,"role":'student'})
     return HttpResponse(template.render(context))
 # End Def
 

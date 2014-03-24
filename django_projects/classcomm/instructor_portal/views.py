@@ -1,6 +1,7 @@
 import logging
-logger = logging.getLogger('instructor_portal')
 
+logger = logging.getLogger('instructor_portal')
+import json
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
@@ -26,6 +27,17 @@ def index(request):
     a welcome page that dynamically links them to their allowed actions.
     
     """
+    # first of all verity user id
+    user_access = User.objects.all().filter(username=request.user).values()
+    uid = user_access[0]['id']
+    #logger.error(uid)
+    user_role = extraInfo.objects.all().filter(user=uid).values()[0]['roles']
+    if user_role == '1' or user_role == '3':
+
+        template = loader.get_template('student_portal/login_blocked.html')
+        context = RequestContext(request, {"access_flag": -1})
+        return HttpResponse(template.render(context))
+    # end
     # Get all Courses where request.user is Director, Instructor, Mentor or Mentor_Assigned
     user = request.user
     courses = Course.objects.all().filter(Q(director=user) |
@@ -79,6 +91,48 @@ def index(request):
     return HttpResponse(template.render(context))
 # End Def
 
+@login_required
+def calendar(request):
+
+    user = request.user
+    courses = Course.objects.all().filter(Q(director=user))
+    cal_mode = request.GET['mode']
+    course_info_list=[]
+    #courses = Enrollment.objects.all().filter(student=request.user).select_related().order_by('course')
+    for one in courses:
+        course_info_dic={'coursename':'','courseid':''}
+        course_info_dic['courseid']=one.id
+        course_info_dic['coursename']=one.name
+        course_time = CourseTime.objects.all().filter(Coursename=one.id)
+        ctime_list=[]
+        for cone in course_time:
+            ctime_detail=[]
+            date_dic={'year':'','month':'','day':''}
+            date_dic2={'year':'','month':'','day':''}
+            ctime_dic={'start_date':'','end_date':'','dayofweek':'','timeofday':''}
+            date_dic2['year']=cone.Coursestart_date.year
+            date_dic2['month']=cone.Coursestart_date.month
+            date_dic2['day']=cone.Coursestart_date.day
+            ctime_dic['start_date']= date_dic2
+                
+            date_dic['year']=cone.Courseend_date.year
+            date_dic['month']=cone.Courseend_date.month
+            date_dic['day']=cone.Courseend_date.day
+            ctime_dic['end_date']= date_dic
+            ctime_dic['dayofweek']=cone.Dayofweek
+            ctime_dic['timeofday']=cone.TimeofDay
+            ctime_list.append(ctime_dic)
+        course_info_dic['coursetime']=ctime_list
+        course_info_list.append(course_info_dic)
+
+    logger.error(course_info_list)
+    coursejson = json.dumps(course_info_list)
+
+    template = loader.get_template('instructor_portal/calendar.html')
+    context = RequestContext(request, {"calmode":cal_mode,"courseinfo": coursejson, "role": 'teacher'})
+    return HttpResponse(template.render(context))
+
+#End Def
 @login_required
 def course_index(request, course_id):
     """

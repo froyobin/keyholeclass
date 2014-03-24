@@ -4,6 +4,7 @@ function cal_config(op){
 		var cr=new Calendar();
 			cr.date=op.date;
 			cr.mode=op.mode;
+			cr.role=op.role;
 			cr.language=new Language(op.language);
 
 			cr.load();
@@ -81,8 +82,14 @@ Calendar.prototype.tool=function(){
 	this.day_a.innerHTML=this.language.day;
 	
 	//this.year_a.href='year.html';
+    if (this.role == 'teacher'){
+	this.month_a.href='?mode=month';
+	this.week_a.href='?mode=week';
+    }
+    else{
 	this.month_a.href='index.html?mode=month';
 	this.week_a.href='index.html?mode=week';
+    }
 	//this.day_a.href='index.html?mode=day';
 	
 	//this.c_tl_tb_td_1.appendChild(this.year_a);
