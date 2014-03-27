@@ -22,7 +22,9 @@ urlpatterns = patterns('',
     
     # For instructor portal:
     (r'^instructor/', include('instructor_portal.urls')),
-
+    # For coordinator portal:
+    (r'^coordinator/', include('coordinator.urls')),
+    
     # For User Authentication and Registration URLs:
     (r'^registration/', include('registration.backends.default.urls')),
 

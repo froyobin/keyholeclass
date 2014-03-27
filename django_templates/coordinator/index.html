@@ -1,0 +1,104 @@
+{% extends "coordinator/loggedin_base.html" %}
+
+{% block extrahead %}
+<script type="text/javascript" src="{{ STATIC_URL }}sorttable.js"></script>
+{% endblock %}
+
+{% load instructor_portal_extras %}
+
+{% block content %}
+<script type="text/javascript">
+function altRows(id){
+	if(document.getElementsByTagName){  
+		
+		var table = document.getElementById(id);  
+		var rows = table.getElementsByTagName("tr"); 
+		rows[0].className="titlecolor";
+		for(i = 1; i < rows.length; i++){          
+            if(i % 2 == 0){
+                rows[i].className = "evenrowcolor";
+            }else{
+                rows[i].className = "oddrowcolor";
+            }      
+        }
+	}
+}
+window.onload=function(){
+	altRows('alternatecolor');
+}
+
+
+function popitup(url) {
+    newwindow=window.open(url,'{{title}}');
+    if (window.focus) {newwindow.focus()}
+    return false;
+}
+
+
+
+</script>
+<h3>Keyhole Staff!</h3>
+
+{% if error %}
+<p style="color: red; font-size:200%" >Please submit a search term.</p>
+{% endif %}
+
+
+<form action="index.html" method="get" class="yquery">
+    <a style="font-size:150%">Please input the name: </a>
+    <input type="text" name="q">
+    <select name="items">
+        <option value="teacher"selected="selected">Teacher</option>
+        <option value="course">Course</option>
+    </select>
+    <input type="submit" value="Search">
+</form>
+
+{%if UserInfo%}
+<table class="altrowstable" id="alternatecolor">
+    <tr>
+        <td>Username</td>
+        <td>Email</td>
+        <td>Last Login</td>
+        </tr>
+{%for one in UserInfo%}
+<tr>
+    <td>
+        <a href="calendar.html" onclick="return popitup('calendar.html?item=user&mode=month&user={{one.username}}')">{{one.username}}</a></td>
+   {%if one.email %}
+<td>{{one.email}}</td>
+{%else%}
+<td>NULL</td>
+{%endif%}
+
+   <td>{{one.last_login}}</td>
+</tr>
+{% endfor %}
+</table>
+{%endif%}
+
+{%if CourseInfo%}
+<table class="altrowstable" id="alternatecolor">
+    <tr>
+        <td>Course Name</td>
+        <td>Course Level</td>
+        <td>Course Circle</td>
+        <td>Start Date</td>
+        <td>Open Enrollment</td>
+        </tr>
+{%for one in CourseInfo%}
+<tr>
+    <td>
+        <a href="calendar.html" onclick="return popitup('calendar.html?mode=month&item=course&user={{one.name}}')">{{one.name}}</a></td>
+    <td>{{one.course_level}}</td>
+
+   <td>{{one.course_circle}}</td>
+   <td>{{one.start_date}}</td>
+   <td>{{one.open_enrollments}}</td>
+</tr>
+{% endfor %}
+</table>
+{%endif%}
+
+
+{% endblock %}

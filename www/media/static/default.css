@@ -47,7 +47,8 @@ clear: both;
 
 /**** Main Content Styling ****/
 #content {
-    margin: 0 10px 10px 180px;
+/*    margin: 0 10px 10px 180px;*/
+    margin:0 10px 10px 180px;
     border-left: 1px solid #f0f0f0;
     border-right: 1px solid #f0f0f0;
     padding: 0 10px 100px 10px;
@@ -68,6 +69,15 @@ a {
     color: #286ea0; }
 a:hover {
     text-decoration: underline; }
+
+#yubinform{
+clear:both;
+margin:0 0 10px 340px;
+font-size:1.5em;
+width:50px;
+
+}
+
 
 /**** Footer Styling ****/
 #footer {
@@ -292,5 +302,66 @@ table.resourceinfo td {
     border-bottom: 2px solid #FFFFFF;
     padding: 0.1em 0.5em;
     background: #DBE2F1; }
+
+table.hovertable {
+    font-family: verdana,arial,sans-serif;
+    font-size:11px;
+    color:#333333;
+    border-width: 1px;
+    border-color: #999999;
+    border-collapse: collapse;
+}
+table.hovertable th {
+    background-color:#c3dde0;
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #a9c6c9;
+}
+table.hovertable tr {
+    background-color:#d4e3e5;
+}
+table.hovertable td {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #a9c6c9;
+}
+table.altrowstable {
+	font-family: verdana,arial,sans-serif;
+	font-size:11px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #a9c6c9;
+	border-collapse: collapse;
+    margin:auto;
+    width:700px;
+}
+table.altrowstable th {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #a9c6c9;
+}
+table.altrowstable td {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #a9c6c9;
+}
+.oddrowcolor{
+	background-color:#d4e3e5;
+}
+.evenrowcolor{
+	background-color:#c3dde0;
+}
+.titlecolor{
+	background-color:#66ff00;
+}
+
+form.yquery{
+    width:700px;
+
+}
 
 
