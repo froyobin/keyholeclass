@@ -51,6 +51,7 @@ class Course(models.Model):
         Optionally, a Course may specify a single Course Director User.
         Also Optionally, a Course may be marked as available for open_enrollments (default=False).
     """
+    TYPE = (('1','ENGLISH'),('2','CHINESE'),('3','OPTION'),('4','RESERVE'),('5','RESERVE'),('6','RESERVE'),('7','RESERVE'))
     # Data Model (DB) Fields
     department = models.ForeignKey(Department,blank=False,null=True)
     name = models.CharField(max_length=100)
@@ -62,6 +63,7 @@ class Course(models.Model):
     enrollment_length = models.IntegerField('Default Enrollment Length (in Weeks)', default=16)
     description = models.TextField('Description')
     open_enrollments = models.BooleanField("Open Student Enrollments?", default=False)
+    coursetype = models.CharField(max_length=2,choices=TYPE,blank=False,null=True)
 
     def __unicode__(self):
         return (self.name)
@@ -103,14 +105,19 @@ class Course(models.Model):
 
 class CourseTime(models.Model):
     DAYS = (('1','MONDAY'),('2','TUESDAY'),('3','Wednesday'),('4','THURSDAY'),('5','FRIDAY'),('6','Saturday'),('7','Sunday'))
-    COURSETIME = (('1','8:00-10:00'),('2','10:30-12:30'),('3','13:30-15:30'),('4','16:00-18:00'))
+    COURSETIME = (('1','9:00'),('2','9:15'),('3','9:30'),('4','9:45'),('5','10:00'),('6','10:15'),('7','10:30'),('8','10:45'),('9','11:00'),\
+            ('10','11:15'),('11','11:30'),('12','11:45'),('13','12:00'),('14','12:15'),('15','12:30'),('16','12:45'),('17','13:00'),('18','13:15'),\
+            ('19','13:30'),('20','13:45'),('21','14:00'),('21','14:15'),('22','14:30'),('23','14:45'),('24','15:00'),('25','15:15'),('26','15:30'),\
+            ('27','15:45'),('28','16:00'),('29','16:15'),('30','16:30'),('31','16:45'),('32','17:00'),('33','17:15'),('34','17:30'),('35','17:45'),\
+            ('36','18:00'),('37','18:15'),('38','18:30'),('39','18:45'),('40','19:00'),('41','19:15'),('42','19:30'),)
     Coursename = models.ForeignKey(Course)
     Dayofweek = models.CharField(max_length=1,choices=DAYS,blank=False,null=True)
-    TimeofDay = models.CharField(max_length=1,choices=COURSETIME,blank=False,null=True)
+    TimeofDay_Start = models.CharField(max_length=3,choices=COURSETIME,blank=False,null=True)
+    TimeofDay_End = models.CharField(max_length=3,choices=COURSETIME,blank=False,null=True)
     Coursestart_date = models.DateField('Start Date', help_text="Date course begins.",blank=False,null=True)
     Courseend_date= models.DateField('End Date', help_text="Date course ends.",blank=False,null=True)
     class Meta:
-        unique_together=(('Coursename','Dayofweek','TimeofDay','Coursestart_date','Courseend_date'),)
+        unique_together=(('Coursename','Dayofweek','TimeofDay_Start','TimeofDay_End','Coursestart_date','Courseend_date'),)
     def __unicode__(self):
         return (self.Coursename.name)
     
@@ -608,7 +615,9 @@ class StudentInfo(models.Model):
     CSTDate = models.DateField('Contract start date')
     CENDate = models.DateField('Contract end date') 
     LevelS = models.CharField('Level start',max_length=10)
+    LevelN = models.CharField('Level now',max_length=10)
     Levele = models.CharField('Level ends',max_length = 10)
+    Circle = models.CharField('Current Circle',max_length = 10)
     TotalMony = models.FloatField('Total money paid')
     SchoolBranch = models.CharField('School Branch code',max_length=100)
     Studentnumber = models.CharField('Student number',max_length=100)

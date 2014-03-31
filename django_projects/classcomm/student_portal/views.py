@@ -52,7 +52,7 @@ def index(request):
             ctime_detail=[]
             date_dic={'year':'','month':'','day':''}
             date_dic2={'year':'','month':'','day':''}
-            ctime_dic={'start_date':'','end_date':'','dayofweek':'','timeofday':''}
+            ctime_dic={'start_date':'','end_date':'','dayofweek':'','timeofdaystart':'','timeofdayend':''}
             date_dic2['year']=cone.Coursestart_date.year
             date_dic2['month']=cone.Coursestart_date.month
             date_dic2['day']=cone.Coursestart_date.day
@@ -63,7 +63,8 @@ def index(request):
             date_dic['day']=cone.Courseend_date.day
             ctime_dic['end_date']= date_dic
             ctime_dic['dayofweek']=cone.Dayofweek
-            ctime_dic['timeofday']=cone.TimeofDay
+            ctime_dic['timeofdaystart']=cone.TimeofDay_Start
+            ctime_dic['timeofdayend']=cone.TimeofDay_End
             ctime_list.append(ctime_dic)
         course_info_dic['coursetime']=ctime_list
         course_info_list.append(course_info_dic)
@@ -112,7 +113,15 @@ def open_enrollments(request):
     course_list = []
     ctime=[]
     dic_days={'1':'Monday','2':'Tuesday','3':'Wednesday','4':'Thursday','5':'Friday','6':'Saturday','7':'Sunday'}
-    dic_time={'1':'8:00-10:00','2':'10:30-12:30','3':'13:30-15:30','4':'16:00-18:00'}
+
+
+    COURSETIME = {'1':'9:00','2':'9:15','3':'9:30','4':'9:45','5':'10:00','6':'10:15','7':'10:30','8':'10:45','9':'11:00',\
+            '10':'11:15','11':'11:30','12':'11:45','13':'12:00','14':'12:15','15':'12:30','16':'12:45','17':'13:00','18':'13:15',\
+            '19':'13:30','20':'13:45','21':'14:00','21':'14:15','22':'14:30','23':'14:45','24':'15:00','25':'15:15','26':'15:30',\
+            '27':'15:45','28':'16:00','29':'16:15','30':'16:30','31':'16:45','32':'17:00','33':'17:15','34':'17:30','35':'17:45','36':'18:00','37':'18:15','38':'18:30','39':'18:45','40':'19:00','41':'19:15','42':'19:30'}
+
+
+
     for course in courses:
         combo = []
         ctime=[]
@@ -123,9 +132,10 @@ def open_enrollments(request):
         if add_course:
     ##yubin add##
             course_time = CourseTime.objects.all().filter(Coursename=course).values()
+            logger.error(course_time)
             for one in course_time:
 
-                sendstirng = str(one['Coursestart_date'])+'~'+str(one['Courseend_date'])+"\n Week: "+dic_days[one['Dayofweek']]+"\n at: "+dic_time[one['TimeofDay']]
+                sendstirng = str(one['Coursestart_date'])+'~'+str(one['Courseend_date'])+"\n Week: "+dic_days[one['Dayofweek']]+"\n at: "+COURSETIME[one['TimeofDay_Start']]+'~'+COURSETIME[one['TimeofDay_End']]
                 ctime.append(sendstirng)
             logger.error(ctime)
             combo.append(course)

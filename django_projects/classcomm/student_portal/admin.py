@@ -65,17 +65,17 @@ class CourseAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description', 'department__name', 'director__username', 'director__email']
     fieldsets = (
         ('Basic information', {
-            'fields': ('department', 'name','course_level','course_circle','start_date','director','enrollment_length', 'description')
+            'fields': ('department', 'name','course_level','course_circle','start_date','director','enrollment_length','coursetype', 'description','open_enrollments')
         }),
         #('Class detail', {
         #    'fields': ('start_date','end_date','dayOfweek',)
         #,'classes':['collapse']}),
-	('Advanced options', {
-            'classes': ('collapse',),
-            'fields': ('open_enrollments',)
-        }),
+   #('Advanced options', {
+   #         'classes': ('collapse',),
+   #         'fields': ('open_enrollments',)
+   #     }),
     )
-    inlines = [CourseTime,InstructorInline, MentorInline, AssignmentInline]
+    inlines = [CourseTime,InstructorInline, MentorInline]
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'director':
@@ -577,6 +577,19 @@ class StudentInfoAdmin(admin.ModelAdmin):
     list_filter = ['Studentnumber','cName']
     list_select_related = True
     search_fields = ['Studentnumber','cName']
+    #readonly_fields = ['LevelS']
+    fieldsets = (('Basic Information', {'fields': ('User','cName',\
+       'cPname','age','ContactNumber','Email','CSTDate','CENDate',\
+       'LevelS','LevelN','Levele','Circle','TotalMony','SchoolBranch',\
+       'Studentnumber','prograssLog')}),)
+    def get_readonly_fields(self,request,obj=None):
+        if obj:
+            return self.readonly_fields + ('LevelS',)
+        else:
+            return self.readonly_fields
+
+    #fields
+    #fields=['id','LevelS']
 #    fieldsets = (
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         userrole=[]
@@ -634,13 +647,13 @@ admin.site.register(Instructor, InstructorAdmin)
 admin.site.register(StudentInfo, StudentInfoAdmin)
 admin.site.register(Mentor, MentorAdmin)
 admin.site.register(Enrollment, EnrollmentAdmin)
-admin.site.register(Assignment, AssignmentAdmin)
-admin.site.register(DueDateOverride, DueDateOverrideAdmin)
-admin.site.register(Submission, SubmissionAdmin)
-admin.site.register(Grade, GradeAdmin)
-admin.site.register(ExtraCredit, ExtraCreditAdmin)
+#admin.site.register(Assignment, AssignmentAdmin)
+#admin.site.register(DueDateOverride, DueDateOverrideAdmin)
+#admin.site.register(Submission, SubmissionAdmin)
+#admin.site.register(Grade, GradeAdmin)
+#admin.site.register(ExtraCredit, ExtraCreditAdmin)
 admin.site.register(Information, InformationAdmin)
-admin.site.register(Resource, ResourceAdmin)
+#admin.site.register(Resource, ResourceAdmin)
 admin.site.register(Announcement, AnnouncementAdmin)
 admin.site.register(StaffInfo, StaffInfoAdmin)
 admin.site.register(PotentialStudent, PStudentInfoAdmin)
