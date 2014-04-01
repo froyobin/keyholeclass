@@ -40,8 +40,21 @@
 </tr>
 {% endfor %}
 <tr>
+   <td><i>CourseType:</i>  {{ combo.0.coursetype}}</td>
+</tr>
+<tr>
+   <td><i>Available Seats:</i>  {{ combo.2}}</td>
+</tr>
+{%if combo.3%}
+<tr>
    <td><input type="submit" value="Enroll in this course!" /></td>
 </tr>
+{%else%}
+<tr>
+   <td><input type="submit" disabled=true value="Enrollment not available!" /></td>
+</tr>
+
+{%endif%}
 </table>
 </form>
 {% endfor %}

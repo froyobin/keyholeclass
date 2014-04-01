@@ -2,6 +2,7 @@ import logging
 import json
 logger = logging.getLogger('student_portal')
 
+import datetime
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
@@ -104,10 +105,11 @@ def open_enrollments(request):
                                             enrollment.pk, force_unicode(enrollment), action_flag=ADDITION)
                 return HttpResponseRedirect(reverse('student_portal.views.open_enrollments', args=[]))
     # EndPOST
-
+    uid = User.objects.all().filter(username=request.user).select_related().values()[0]['id']
+    level = StudentInfo.objects.all().filter(User=uid).values()[0]['LevelN']
     # Get all enrollments and courses for the current user
     enrollments = Enrollment.objects.all().filter(student=request.user).select_related().order_by('-course')
-    courses = Course.objects.all().filter(open_enrollments=1).select_related()
+    courses = Course.objects.all().filter(open_enrollments=1).filter(course_level=level).select_related()
 
     # Exclude listing any courses where User already has Enrollment
     course_list = []
@@ -126,20 +128,36 @@ def open_enrollments(request):
         combo = []
         ctime=[]
         add_course = 1
+        
+        if course.start_date-datetime.date.today() > datetime.timedelta(course.AheadTime):
+            continue
+
         for enrollment in enrollments:
             if course == enrollment.course:
                 add_course = 0
+                continue
+        #make sure student cannot book this course only 1 day ahead.
+        if course.start_date-datetime.date.today()<datetime.timedelta(1):
+            logger.error("Time expired")
+            continue
+            add_course = 0
+
         if add_course:
     ##yubin add##
+            left = course.TotalStudent - Enrollment.objects.all().filter(course=course).count()
+            if  left>0:
+                ava = True
+            else:
+                ava = False
             course_time = CourseTime.objects.all().filter(Coursename=course).values()
-            logger.error(course_time)
             for one in course_time:
 
                 sendstirng = str(one['Coursestart_date'])+'~'+str(one['Courseend_date'])+"\n Week: "+dic_days[one['Dayofweek']]+"\n at: "+COURSETIME[one['TimeofDay_Start']]+'~'+COURSETIME[one['TimeofDay_End']]
                 ctime.append(sendstirng)
-            logger.error(ctime)
             combo.append(course)
             combo.append(ctime)
+            combo.append(left)
+            combo.append(ava)
             course_list.append(combo)
 
     # Specify template, generate context, and return response

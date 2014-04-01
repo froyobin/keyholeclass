@@ -51,7 +51,7 @@ class Course(models.Model):
         Optionally, a Course may specify a single Course Director User.
         Also Optionally, a Course may be marked as available for open_enrollments (default=False).
     """
-    TYPE = (('1','ENGLISH'),('2','CHINESE'),('3','OPTION'),('4','RESERVE'),('5','RESERVE'),('6','RESERVE'),('7','RESERVE'))
+    TYPE = (('ENGLISH','ENGLISH'),('CHINESE','CHINESE'),('OPTIONAL','OPTIONAL'),('RESERVE','RESERVE'),('RESERVE','RESERVE'),('RESERVE','RESERVE'),('RESERVE','RESERVE'))
     # Data Model (DB) Fields
     department = models.ForeignKey(Department,blank=False,null=True)
     name = models.CharField(max_length=100)
@@ -63,7 +63,9 @@ class Course(models.Model):
     enrollment_length = models.IntegerField('Default Enrollment Length (in Weeks)', default=16)
     description = models.TextField('Description')
     open_enrollments = models.BooleanField("Open Student Enrollments?", default=False)
-    coursetype = models.CharField(max_length=2,choices=TYPE,blank=False,null=True)
+    coursetype = models.CharField(max_length=20,choices=TYPE,blank=False,null=True)
+    TotalStudent = models.IntegerField(blank=False,null=False,default=10,help_text="define the number of student in this course")
+    AheadTime = models.IntegerField(blank=False,null=False,default=3,help_text="define days the student can book ahead of begins")
 
     def __unicode__(self):
         return (self.name)

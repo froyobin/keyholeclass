@@ -65,7 +65,7 @@ class CourseAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description', 'department__name', 'director__username', 'director__email']
     fieldsets = (
         ('Basic information', {
-            'fields': ('department', 'name','course_level','course_circle','start_date','director','enrollment_length','coursetype', 'description','open_enrollments')
+            'fields': ('department', 'name','course_level','course_circle','start_date','director','enrollment_length','coursetype','TotalStudent','AheadTime', 'description','open_enrollments')
         }),
         #('Class detail', {
         #    'fields': ('start_date','end_date','dayOfweek',)
