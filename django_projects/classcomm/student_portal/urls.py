@@ -16,6 +16,7 @@ from django.conf.urls.defaults import *
 urlpatterns = patterns('',
    (r'^$', 'student_portal.views.index'),
    (r'^index.html$', 'student_portal.views.index'),
+   (r'^calendar.html$', 'student_portal.views.calendar'),
    (r'^welcome/$', 'student_portal.views.index'),
    (r'^open_enrollments/$',
         'student_portal.views.open_enrollments'),

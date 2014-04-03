@@ -59,6 +59,7 @@ class Course(models.Model):
     course_circle = models.IntegerField(verbose_name='Circle',default=1,help_text="define how many Circles in one level")
     #dayOfweek= models.CharField(max_length=7)
     start_date = models.DateField('Start Date', help_text="Date course begins.",blank=False)
+    end_date = models.DateField('End Date', help_text="Date course begins.",blank=False)
     director = models.ForeignKey(User, verbose_name='Course Director', null=True, blank=False)
     enrollment_length = models.IntegerField('Default Enrollment Length (in Weeks)', default=16)
     description = models.TextField('Description')
@@ -109,9 +110,9 @@ class CourseTime(models.Model):
     DAYS = (('1','MONDAY'),('2','TUESDAY'),('3','Wednesday'),('4','THURSDAY'),('5','FRIDAY'),('6','Saturday'),('7','Sunday'))
     COURSETIME = (('1','9:00'),('2','9:15'),('3','9:30'),('4','9:45'),('5','10:00'),('6','10:15'),('7','10:30'),('8','10:45'),('9','11:00'),\
             ('10','11:15'),('11','11:30'),('12','11:45'),('13','12:00'),('14','12:15'),('15','12:30'),('16','12:45'),('17','13:00'),('18','13:15'),\
-            ('19','13:30'),('20','13:45'),('21','14:00'),('21','14:15'),('22','14:30'),('23','14:45'),('24','15:00'),('25','15:15'),('26','15:30'),\
-            ('27','15:45'),('28','16:00'),('29','16:15'),('30','16:30'),('31','16:45'),('32','17:00'),('33','17:15'),('34','17:30'),('35','17:45'),\
-            ('36','18:00'),('37','18:15'),('38','18:30'),('39','18:45'),('40','19:00'),('41','19:15'),('42','19:30'),)
+            ('19','13:30'),('20','13:45'),('21','14:00'),('22','14:15'),('23','14:30'),('24','14:45'),('25','15:00'),('26','15:15'),('27','15:30'),\
+            ('28','15:45'),('29','16:00'),('30','16:15'),('31','16:30'),('32','16:45'),('33','17:00'),('34','17:15'),('35','17:30'),('36','17:45'),\
+            ('37','18:00'),('38','18:15'),('39','18:30'),('40','18:45'),('41','19:00'),('42','19:15'),('43','19:30'),)
     Coursename = models.ForeignKey(Course)
     Dayofweek = models.CharField(max_length=1,choices=DAYS,blank=False,null=True)
     TimeofDay_Start = models.CharField(max_length=3,choices=COURSETIME,blank=False,null=True)

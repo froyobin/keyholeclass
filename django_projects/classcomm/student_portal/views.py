@@ -40,6 +40,85 @@ def index(request):
         context = RequestContext(request, {"access_flag": -1})
         return HttpResponse(template.render(context))
     # end
+    
+    if request.POST: # Handle POST data
+        instance = Enrollment.objects.get(id__exact=request.POST['courseid'])
+        instance.delete()
+    DEFAULT_LOCK = 2
+    course_info_list=[]
+    enrollments = Enrollment.objects.all().filter(student=request.user).select_related().order_by('course')
+    for one in enrollments:
+        course_info_dic={'coursename':'','courseid':'','coursetype':'','bookstatus':'','course_started':'','course_ended':''}
+        course_info_dic['courseid']=one.id
+        course_info_dic['coursename']=one.course.name
+        course_info_dic['coursetype']=one.course.coursetype
+        if one.course.start_date > datetime.date.today() :
+            course_info_dic['course_started']=True
+        else:
+            course_info_dic['course_started']=False
+        if one.course.end_date<datetime.date.today():
+            course_info_dic['course_ended']=True
+        else:
+            course_info_dic['course_ended']=False
+    
+        if one.course.start_date-datetime.date.today() > datetime.timedelta(DEFAULT_LOCK):
+            course_info_dic['bookstatus'] = False
+        else:
+            course_info_dic['bookstatus'] = True
+
+        course_time = CourseTime.objects.all().filter(Coursename=one.course)
+        ctime_list=[]
+        for cone in course_time:
+            ctime_detail=[]
+            date_dic={'year':'','month':'','day':''}
+            date_dic2={'year':'','month':'','day':''}
+            ctime_dic={'start_date':'','end_date':'','dayofweek':'','timeofdaystart':'','timeofdayend':''}
+            date_dic2['year']=cone.Coursestart_date.year
+            date_dic2['month']=cone.Coursestart_date.month
+            date_dic2['day']=cone.Coursestart_date.day
+            ctime_dic['start_date']= date_dic2
+                
+            date_dic['year']=cone.Courseend_date.year
+            date_dic['month']=cone.Courseend_date.month
+            date_dic['day']=cone.Courseend_date.day
+            ctime_dic['end_date']= date_dic
+            ctime_dic['dayofweek']=cone.Dayofweek
+            ctime_dic['timeofdaystart']=cone.TimeofDay_Start
+            ctime_dic['timeofdayend']=cone.TimeofDay_End
+            ctime_list.append(ctime_dic)
+        course_info_dic['coursetime']=ctime_list
+        course_info_list.append(course_info_dic)
+
+    # Get all global announcements ordered by date
+    announcements = Announcement.objects.all().filter(make_global=1).select_related('author').order_by('-pub_date')
+
+    # Specify template, generate context, and return response
+    coursejson = json.dumps(course_info_list)
+    #logger.error(coursejson)
+    template = loader.get_template('student_portal/index.html')
+    context = RequestContext(request, {"enrollments": enrollments, "announcements": announcements,"courseinfo":coursejson,"role":'student'})
+    return HttpResponse(template.render(context))
+# End Def
+
+@login_required
+def calendar(request):
+    """
+    Main classcomm student portal view for students to see welcome page
+    dynamically linking them into their enrolled courses.
+
+    """
+    # Get all enrollments for the current user
+    # first of all verity user id
+    user_access = User.objects.all().filter(username=request.user).values()
+    uid = user_access[0]['id']
+    #logger.error(uid)
+    user_role = extraInfo.objects.all().filter(user=uid).values()[0]['roles']
+    if user_role != '1':
+
+        template = loader.get_template('student_portal/login_blocked.html')
+        context = RequestContext(request, {"access_flag": -1})
+        return HttpResponse(template.render(context))
+    # end
     cal_mode = request.GET['mode']
     course_info_list=[]
     enrollments = Enrollment.objects.all().filter(student=request.user).select_related().order_by('course')
@@ -69,7 +148,6 @@ def index(request):
             ctime_list.append(ctime_dic)
         course_info_dic['coursetime']=ctime_list
         course_info_list.append(course_info_dic)
-    #logger.error(course_info_list)
 
     # Get all global announcements ordered by date
     announcements = Announcement.objects.all().filter(make_global=1).select_related('author').order_by('-pub_date')
@@ -77,11 +155,10 @@ def index(request):
     # Specify template, generate context, and return response
     coursejson = json.dumps(course_info_list)
     #logger.error(coursejson)
-    template = loader.get_template('student_portal/index.html')
-    context = RequestContext(request, {"calmode":cal_mode,"enrollments": enrollments, "announcements": announcements,"courseinfo":coursejson,"role":'student'})
+    template = loader.get_template('student_portal/calendar.html')
+    context = RequestContext(request, {"calmode":cal_mode,"enrollments": enrollments, "announcements": announcements,"courseinfo":coursejson,"role":'student','allcourse':course_info_list,})
     return HttpResponse(template.render(context))
 # End Def
-
 @login_required
 def open_enrollments(request):
     """
@@ -119,8 +196,8 @@ def open_enrollments(request):
 
     COURSETIME = {'1':'9:00','2':'9:15','3':'9:30','4':'9:45','5':'10:00','6':'10:15','7':'10:30','8':'10:45','9':'11:00',\
             '10':'11:15','11':'11:30','12':'11:45','13':'12:00','14':'12:15','15':'12:30','16':'12:45','17':'13:00','18':'13:15',\
-            '19':'13:30','20':'13:45','21':'14:00','21':'14:15','22':'14:30','23':'14:45','24':'15:00','25':'15:15','26':'15:30',\
-            '27':'15:45','28':'16:00','29':'16:15','30':'16:30','31':'16:45','32':'17:00','33':'17:15','34':'17:30','35':'17:45','36':'18:00','37':'18:15','38':'18:30','39':'18:45','40':'19:00','41':'19:15','42':'19:30'}
+            '19':'13:30','20':'13:45','21':'14:00','22':'14:15','23':'14:30','24':'14:45','25':'15:00','26':'15:15','27':'15:30',\
+            '28':'15:45','29':'16:00','30':'16:15','31':'16:30','32':'16:45','33':'17:00','34':'17:15','35':'17:30','36':'17:45','37':'18:00','38':'18:15','39':'18:30','40':'18:45','41':'19:00','42':'19:15','43':'19:30'}
 
 
 
@@ -128,7 +205,7 @@ def open_enrollments(request):
         combo = []
         ctime=[]
         add_course = 1
-        
+        ##fixme###
         if course.start_date-datetime.date.today() > datetime.timedelta(course.AheadTime):
             continue
 
@@ -138,7 +215,6 @@ def open_enrollments(request):
                 continue
         #make sure student cannot book this course only 1 day ahead.
         if course.start_date-datetime.date.today()<datetime.timedelta(1):
-            logger.error("Time expired")
             continue
             add_course = 0
 

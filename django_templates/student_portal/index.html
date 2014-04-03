@@ -1,38 +1,271 @@
 {% extends "student_portal/loggedin_base.html" %}
-
+http://www.cnblogs.com/rainlam163/p/3259494.html
 {% load student_portal_extras %}
 
 {% block extrahead %}
 <script type="text/javascript" src="{{ STATIC_URL }}sorttable.js"></script>
 <link type="text/css" href="{{STATIC_URL}}css/calendar.css" rel="stylesheet"/ >
+  <style type="text/css">
+        table
+        {
+            padding: 0;
+            margin: auto;
+            border-collapse: collapse;
+            table-layout:fixed;
+        }
+        
+        td
+        {
+            border: 1px solid #009999;
+            padding: 6px 6px 6px 12px;
+            color: #4f6b72;
+            text-align: center;
+            word-break:break-all;
+        }
+        
+        td button
+        {
+            font-size: 12px;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
+
+
+<script  id="config" type="text/javascript" courseinfo="{{courseinfo}}">
+
+       function chooseweekofday(value)
+       {
+        var returnstr = "undefine";
+        switch(parseInt(value))
+        {
+            case 1: returnstr = "MONDAY";break;
+            case 2: returnstr = "TUESDAY";break;
+            case 3: returnstr = "WEDNESDAY";break;
+            case 4: returnstr = "THURSDAY";break;
+            case 5: returnstr = "FRIDAY";break;
+            case 6: returnstr = "SATURDAY";break;
+            case 7: returnstr = "SUNDAY";break;
+            defalut: break;
+        }
+        return returnstr;
+       }
+
+        function chooseday(value)
+        {
+            var returnstr="undefine"
+            switch(parseInt(value))
+            {
+                case 1: returnstr = "9:00";break;
+                case 2: returnstr = "9:15";break;
+                case 3: returnstr = "9:30";break;
+                case 4: returnstr = "9:45";break;
+                case 5: returnstr = "10:00";break;
+                case 6: returnstr = "10:15";break;
+                case 7: returnstr = "10:30";break;
+                case 8: returnstr = "10:45";break;
+                case 9: returnstr = "11:00";break;
+                case 10: returnstr = "11:15";break;
+                case 11: returnstr = "11:30";break;
+                case 12: returnstr = "11:45";break;
+                case 13: returnstr = "12:00";break;
+                case 14: returnstr = "12:15";break;
+                case 15: returnstr = "12:30";break;
+                case 16: returnstr = "12:45";break;
+                case 17: returnstr = "13:00";break;
+                case 18: returnstr = "13:15";break;
+                case 19: returnstr = "13:30";break;
+                case 20: returnstr = "13:45";break;
+                case 21: returnstr = "14:00";break;
+                case 22: returnstr = "14:15";break;
+                case 23: returnstr = "14:30";break;
+                case 24: returnstr = "14:45";break;
+                case 25: returnstr = "15:00";break;
+                case 26: returnstr = "15:15";break;
+                case 27: returnstr = "15:30";break;
+                case 28: returnstr = "15:45";break;
+                case 29: returnstr = "16:00";break;
+                case 30: returnstr = "16:15";break;
+                case 31: returnstr = "16:30";break;
+                case 32: returnstr = "16:45";break;
+                case 33: returnstr = "17:00";break;
+                case 34: returnstr = "17:15";break;
+                case 35: returnstr = "17:30";break;
+                case 36: returnstr = "17:45";break;
+                case 37: returnstr = "18:00";break;
+                case 38: returnstr = "18:15";break;
+                case 39: returnstr = "18:30";break;
+                case 40: returnstr = "18:45";break;
+                case 41: returnstr = "19:00";break;
+                case 42: returnstr = "19:15";break;
+                case 42: returnstr = "19:30";break;
+                defalut: returnstr = "undefine";break;
+            }
+            return returnstr;
+        }   
+
+
+    function post_to_url(path, params, method) {
+        method = method || "post"; // Set method to post by default if not specified.
+
+    // The rest of this code assumes you are not using a library.
+    // It can be made less wordy if you use one.
+        var form = document.createElement("form");
+        form.setAttribute("method", method);
+        form.setAttribute("action", path);
+        //alert(token)
+        var myinput = document.createElement("input");
+        myinput.type="hidden";
+        myinput.value=token;
+        myinput.name="csrfmiddlewaretoken";
+        form.appendChild(myinput);
+
+        for(var key in params) {
+            if(params.hasOwnProperty(key)) {
+                var hiddenField = document.createElement("input");
+                hiddenField.setAttribute("type", "hidden");
+                hiddenField.setAttribute("name", key);
+                hiddenField.setAttribute("value", params[key]);
+
+                form.appendChild(hiddenField);
+            }
+        }
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+
+
+        function myonclick(value,token)
+        {
+            post_to_url('index.html',{courseid:value})
+                    
+        }
+        function createTable(toid,type,token) {
+            var me=document.getElementById('config').getAttribute('courseinfo');
+            var handle_data = eval(me);
+            var table = document.createElement("table");
+            var tr, td;
+
+            tr = document.createElement("tr");
+            td1 = document.createElement("td");
+            td3 = document.createElement("td");
+            td4 = document.createElement("td");
+            td5 = document.createElement("td");
+            td1.appendChild(document.createTextNode("Course Name"));
+            td1.style.background = "#C1DAD7"
+            td3.appendChild(document.createTextNode("Course Time"));
+            td3.style.background = "#C1DAD7"
+            td4.appendChild(document.createTextNode("Course Type"));
+            td4.style.background = "#C1DAD7"
+            td5.appendChild(document.createTextNode("Course Status"));
+            td5.style.background = "#C1DAD7"
+            tr.appendChild(td1);
+            tr.appendChild(td3);
+            tr.appendChild(td4);
+            tr.appendChild(td5);
+            table.appendChild(tr);
+            
+            var length = handle_data.length;
+            for (var pos=0;pos<length;pos++)
+            {
+
+            
+               if (type == 1)
+               {
+                if (handle_data[pos].course_ended == true)
+                {
+                    continue;
+                    }
+               }
+               
+              if(type == 2){
+              
+                if (handle_data[pos].course_ended !=true){
+                    continue;
+                }
+              }
+
+
+               var tr = document.createElement("tr");
+               var tdcourname = document.createElement("td");
+               tdcourname.appendChild(document.createTextNode(handle_data[pos].coursename));
+               tr.appendChild(tdcourname);
+
+                //course time///
+               var coursetimelist = handle_data[pos].coursetime;
+               var comb = "";
+               for (var i=0;i<coursetimelist.length;i++)
+               {
+    var datestr1 = coursetimelist[i].start_date.year+"-"+coursetimelist[i].start_date.month+"-"+coursetimelist[i].start_date.day;
+    var datestr2 = coursetimelist[i].end_date.year+"-"+coursetimelist[i].end_date.month+"-"+coursetimelist[i].end_date.day;
+
+
+    var returnstr1 = chooseday(coursetimelist[i].timeofdaystart);
+    var returnstr2 = chooseday(coursetimelist[i].timeofdayend);
+    var weekofday  = chooseweekofday(coursetimelist[i].dayofweek);
+
+
+
+     comb += datestr1+"~"+datestr2+" at "+weekofday+","+returnstr1+"~"+returnstr2+'\n';
+
+               }
+               var tdcoursetime = document.createElement("td");
+               tdcoursetime.appendChild(document.createTextNode(comb));
+               tr.appendChild(tdcoursetime)
+               var tdcoursetype = document.createElement("td");
+               tdcoursetype.appendChild(document.createTextNode(handle_data[pos].coursetype));
+               tr.appendChild(tdcoursetype)
+                   
+               var tdcoursestatus = document.createElement("td");
+               if (handle_data[pos].bookstatus ||type==2)
+               {
+                  tbutton = document.createElement("button")
+                  tbutton.name="button";
+                  tbutton.disabled=true;
+                  tbutton.appendChild(document.createTextNode("booked"));
+                  tdcoursestatus.appendChild(tbutton);
+               }else{
+                  tbutton = document.createElement("button")
+                  tbutton.name="button";
+                  courseid=handle_data[pos].courseid;
+                  tbutton.onclick = function (){myonclick(courseid,token)}
+                  tbutton.appendChild(document.createTextNode("calcle"));
+                  tdcoursestatus.appendChild(tbutton);
+               
+               }
+
+               tr.appendChild(tdcoursestatus);
+               table.appendChild(tr);
+
+            }
+            document.getElementById(toid).appendChild(table);
+        }
+
+
+        
+    </script>
+
+
+    <script type="text/javascript" id="createTable" csrf="{{csrf_token}}">
+            var token=document.getElementById('createTable').getAttribute('csrf');
+    window.onload = function () {
+            createTable("coursetablenow",1,token);
+            createTable("coursetablehistory",2,token);
+        }  
+</script>
+
 {# Course Enrollments #}
-<h3>Your courses in Calendar</h3>
+<h3>{{allcourse}}</h3>
 {% if enrollments %}
 {# Configure Table and print Header #}
-<script  src="{{STATIC_URL}}/js/common.js" type="text/javascript" ></script>
-<script  src="{{STATIC_URL}}js/language.js" type="text/javascript" ></script>
-<script  src="{{STATIC_URL}}js/calendar.js" type="text/javascript" ></script>
-<script  id="{{calmode}}.js" src="{{STATIC_URL}}js/{{calmode}}.js" type="text/javascript" courseinfo="{{courseinfo}}"></script>
-<script  id="event.js" src="{{STATIC_URL}}js/event.js" type="text/javascript" courseinfo="{{courseinfo}}"></script>
-<script  id="event" type="text/javascript" role="{{role}}"></script>
-<script  src="../calendar/js/jquery.js" type="text/javascript" ></script>
-<script  src="{{STATIC_URL}}js/lunar.js" type="text/javascript" ></script>
-<script id="config" type="text/javascript" mode="{{calmode}}">
-        var me=document.getElementById('config').getAttribute('mode');
-        var rolevalue=document.getElementById('event').getAttribute('role');
-        cal_config({
-            date:new Date(),
-            contextPath:'calendar',
-            language:'english',
-            mode:me,
-            role:rolevalue,
-        })	
-    </script>  
-
-
+<h2> Course Now </h2>
+<div id="coursetablenow"></div>
+<h2></h2>
+<h2> Course History </h2>
+<div id="coursetablehistory"></div>
 {% else %}
 <i><h4>You are not enrolled in any courses</h4></i>
 {% endif %}
