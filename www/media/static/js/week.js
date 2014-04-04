@@ -164,7 +164,7 @@ var GridList=function(date,language){
 					this.time_l.className='wc-hour-header wc-business-hours';
 			}
 			this.time_l_v=_create('div');
-			this.time_l_v.style.height='39px';
+			this.time_l_v.style.height='79px';
 			
 			this.time_l_v.innerHTML=language.timeArray[i-1];
 			this.time_am_pm=_create('span');
@@ -323,8 +323,8 @@ var color_me=function(coursetype,start,end,day,frame,coursename,courseid){
         var strday2 = chooseday(end);
         var delta = (parseInt(end)-parseInt(start));   //15min for each gap
         var ydelta = parseInt(start-1)+(9-7)*4; //90/60 is the base of time as class start at 9:00
-        var y= (ydelta*10).toString();
-        var height = (delta*10).toString();//each hour 40
+        var y= (ydelta*20).toString();
+        var height = (delta*20).toString();//each hour 40
         this.event_div.style.top=y +'px';
         this.event_div.style.height= height+'px';
         var date=new Date(day);
@@ -356,9 +356,9 @@ var Slot_div_i=function(){
     this.slot_div_i=_create('div');
 
     if (window.XMLHttpRequest&&!window.ActiveXObject) { 
-        this.slot_div_i.style.height='19px';	
+        this.slot_div_i.style.height='39px';	
     }else{
-        this.slot_div_i.style.height='19px';
+        this.slot_div_i.style.height='39px';
     }
 
     return this.slot_div_i;
@@ -372,7 +372,7 @@ var Slot_div_j=function(date,handle_data,j){
 	
 	this.slot_div_j=_create('div');
 	this.slot_div_j.className='wc-day-column-inner';
-	this.slot_div_j.style.height='560px';
+	this.slot_div_j.style.height='1120px';
 	this.slot_div_j.id=dateMDY+'_week';
 	
     length = handle_data.length
