@@ -32,7 +32,6 @@ def index(request):
     # first of all verity user id
     user_access = User.objects.all().filter(username=request.user).values()
     uid = user_access[0]['id']
-    #logger.error(uid)
     user_role = extraInfo.objects.all().filter(user=uid).values()[0]['roles']
     if user_role != '1':
 
@@ -123,10 +122,11 @@ def calendar(request):
     course_info_list=[]
     enrollments = Enrollment.objects.all().filter(student=request.user).select_related().order_by('course')
     for one in enrollments:
-        course_info_dic={'coursename':'','courseid':''}
+        course_info_dic={'coursename':'','courseid':'','coursetype':''}
         course_info_dic['courseid']=one.id
         course_info_dic['coursename']=one.course.name
         course_time = CourseTime.objects.all().filter(Coursename=one.course)
+        course_info_dic['coursetype']=one.course.coursetype
         ctime_list=[]
         for cone in course_time:
             ctime_detail=[]

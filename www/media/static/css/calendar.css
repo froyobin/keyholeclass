@@ -932,9 +932,45 @@ margin-right:5px;
 	filter:alpha(opacity=80);
 	opacity:0.8;
 }
+.wc-cal-eventE {
+	background-color:#76EEC6;
+	color:#FFFFFF;
+	cursor:pointer;
+	opacity:0.8;
+	overflow:hidden;
+	position:absolute;
+	text-align:center;
+	width:100%;
+	filter:alpha(opacity=80);
+	opacity:0.8;
+}
+.wc-cal-eventC {
+	background-color:#0000ff;
+	color:#FFFFFF;
+	cursor:pointer;
+	opacity:0.8;
+	overflow:hidden;
+	position:absolute;
+	text-align:center;
+	width:100%;
+	filter:alpha(opacity=80);
+	opacity:0.8;
+}
+.wc-cal-eventO {
+	background-color:#228B22;
+	color:#FFFFFF;
+	cursor:pointer;
+	opacity:0.8;
+	overflow:hidden;
+	position:absolute;
+	text-align:center;
+	width:100%;
+	filter:alpha(opacity=80);
+	opacity:0.8;
+}
 .wc-cal-event .wc-time {
-	background-color:#2B72D0;
-	border:1px solid #1B62C0;
+	background-color:#68A1E5;
+	border:1px solid #68A1E5;
 	color:#FFFFFF;
 	font-weight:bold;
 	padding:0;
@@ -1034,3 +1070,7 @@ margin-right:5px;
 
 .today{ background:#FCE89C}
 .hscourse{background:#800080}
+.hscourseE{background:#76EEC6}
+.hscourseC{background:#0000fF}
+.hscourseO{background:#228B22}
+

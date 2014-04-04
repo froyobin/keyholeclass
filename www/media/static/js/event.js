@@ -206,6 +206,68 @@ window.onresize=function(){
 	}
 }
 
+
+
+        function chooseday(value)
+        {
+            var returnstr="undefine"
+            switch(parseInt(value))
+            {
+                case 1: returnstr = "9:00";break;
+                case 2: returnstr = "9:15";break;
+                case 3: returnstr = "9:30";break;
+                case 4: returnstr = "9:45";break;
+                case 5: returnstr = "10:00";break;
+                case 6: returnstr = "10:15";break;
+                case 7: returnstr = "10:30";break;
+                case 8: returnstr = "10:45";break;
+                case 9: returnstr = "11:00";break;
+                case 10: returnstr = "11:15";break;
+                case 11: returnstr = "11:30";break;
+                case 12: returnstr = "11:45";break;
+                case 13: returnstr = "12:00";break;
+                case 14: returnstr = "12:15";break;
+                case 15: returnstr = "12:30";break;
+                case 16: returnstr = "12:45";break;
+                case 17: returnstr = "13:00";break;
+                case 18: returnstr = "13:15";break;
+                case 19: returnstr = "13:30";break;
+                case 20: returnstr = "13:45";break;
+                case 21: returnstr = "14:00";break;
+                case 22: returnstr = "14:15";break;
+                case 23: returnstr = "14:30";break;
+                case 24: returnstr = "14:45";break;
+                case 25: returnstr = "15:00";break;
+                case 26: returnstr = "15:15";break;
+                case 27: returnstr = "15:30";break;
+                case 28: returnstr = "15:45";break;
+                case 29: returnstr = "16:00";break;
+                case 30: returnstr = "16:15";break;
+                case 31: returnstr = "16:30";break;
+                case 32: returnstr = "16:45";break;
+                case 33: returnstr = "17:00";break;
+                case 34: returnstr = "17:15";break;
+                case 35: returnstr = "17:30";break;
+                case 36: returnstr = "17:45";break;
+                case 37: returnstr = "18:00";break;
+                case 38: returnstr = "18:15";break;
+                case 39: returnstr = "18:30";break;
+                case 40: returnstr = "18:45";break;
+                case 41: returnstr = "19:00";break;
+                case 42: returnstr = "19:15";break;
+                case 42: returnstr = "19:30";break;
+                defalut: returnstr = "undefine";break;
+            }
+            return returnstr;
+        }   
+
+
+
+
+
+
+
+
 function showModalDialog(day,beginTime,endTime){
 	//createBlackBg();
 	this.dialog=_create('div');	
@@ -232,14 +294,15 @@ function showModalDialog(day,beginTime,endTime){
     this.table.className='table';
 	this.content=_create('tr');
     var contentarr = new Array();
-    var strday="abc";
+    var strday="abcc";
+    var strday2="abcc"
 	this.btu=_create('div');
 	var date=new Date(day);
 	//alert(day)
 	//this.time.innerHTML=lang.date+' '+date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+" ("
 	//					+lang.weekArray[date.getDay()]+"),  "+Time_hm[beginTime]+" – "+Time_hm[endTime];
 	//this.title.innerHTML="<p>"+lang.title+":</p> <input type='text'>";
-	this.content.innerHTML="<td>Course Name</td><td>Start Date</td><td>End Date</td><td>Time</td>";
+	this.content.innerHTML="<td>Course Name</td><td>Start Date</td><td>Course Type</td><td>Time</td>";
   //  this.content2.innerHTML="<td>Course Name</td><td>Start Date</td><td>End Date</td><td>Day of Week</td><td>Time</td>";
 	
     
@@ -258,14 +321,12 @@ function showModalDialog(day,beginTime,endTime){
         for (var timepos=0;timepos<handle_data[pos].coursetime.length;timepos++){
             if (handle_data[pos].coursetime[timepos].dayofweek == date.getDay()){
                 start_date = handle_data[pos].coursetime[timepos].start_date.year+'/'+handle_data[pos].coursetime[timepos].start_date.month+'/'+handle_data[pos].coursetime[timepos].start_date.day;
-                end_date = handle_data[pos].coursetime[timepos].end_date.year+'/'+handle_data[pos].coursetime[timepos].end_date.month+'/'+handle_data[pos].coursetime[timepos].end_date.day;
-                switch (parseInt(handle_data[pos].coursetime[timepos].timeofday))
-                {
-                    case 1:  strday = "8:00-10:00" ;break;
-                    case 2:  strday = "10:30-12:30";break;
-                    case 3:  strday = "13:30-15:30";break;
-                    case 4:  strday = "16:00-18:00";break;
-                }
+                //end_date = handle_data[pos].coursetime[timepos].end_date.year+'/'+handle_data[pos].coursetime[timepos].end_date.month+'/'+handle_data[pos].coursetime[timepos].end_date.day;
+                coursetype = handle_data[pos].coursetype;
+
+                strday = chooseday(parseInt(handle_data[pos].coursetime[timepos].timeofdaystart));
+                strday2 = chooseday(parseInt(handle_data[pos].coursetime[timepos].timeofdayend));
+
                 this.content2=_create('tr');
 
         var choose=document.getElementById('event').getAttribute('role');
@@ -277,7 +338,7 @@ function showModalDialog(day,beginTime,endTime){
         }
 
 
-                    this.content2.innerHTML="<td>"+coursename_link+"</td><td>"+start_date+"</td><td>"+end_date+"</td><td>"+strday+"</td>";
+                    this.content2.innerHTML="<td>"+coursename_link+"</td><td>"+start_date+"</td><td>"+coursetype+"</td><td>"+strday+"~"+strday2+"</td>";
                     //this.content2.innerHTML="<td>"+handle_data[pos].coursename+"</td><td>"+start_date+"</td><td>"+end_date+"</td><td>"+strday+"</td>";
                 this.table.appendChild(this.content2);
             }

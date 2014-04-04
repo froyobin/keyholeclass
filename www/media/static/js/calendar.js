@@ -87,8 +87,8 @@ Calendar.prototype.tool=function(){
 	this.week_a.href='?mode=week';
     }
     else{
-	this.month_a.href='index.html?mode=month';
-	this.week_a.href='index.html?mode=week';
+	this.month_a.href='calendar.html?mode=month';
+	this.week_a.href='calendar.html?mode=week';
     }
 	//this.day_a.href='index.html?mode=day';
 	

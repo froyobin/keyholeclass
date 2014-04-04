@@ -142,7 +142,7 @@ var GridList=function(date,language){
 		this.c_g_tr_td_slot_div=_create('div');
 		this.c_g_tr_td_slot_div.className='wc-time-slots';
 		
-		for(var i=1;i<=32;i++){
+		for(var i=1;i<=28;i++){
 			var slot_div_i=new Slot_div_i();
 			if(i%2==0){
 				slot_div_i.className='wc-time-slot wc-hour-end';	
@@ -156,7 +156,7 @@ var GridList=function(date,language){
 		this.c_g_tr_b_td_time.style.width='6%';
 		this.c_g_tr_b_td_time.style.backgroundColor='#eee';
 		
-		for(var i=6;i<=21;i++){
+		for(var i=8;i<=21;i++){
 			this.time_l=_create('div');
 			if(i>=9&&i<=18){
 					this.time_l.className='wc-hour-header wc-business-hours';
@@ -226,7 +226,59 @@ var GridList=function(date,language){
 	return this.c_g_div;	
 }
 
-var color_me=function(coursetime,day,frame,coursename,courseid){
+        function chooseday(value)
+        {
+            var returnstr="undefine"
+            switch(parseInt(value))
+            {
+                case 1: returnstr = "9:00";break;
+                case 2: returnstr = "9:15";break;
+                case 3: returnstr = "9:30";break;
+                case 4: returnstr = "9:45";break;
+                case 5: returnstr = "10:00";break;
+                case 6: returnstr = "10:15";break;
+                case 7: returnstr = "10:30";break;
+                case 8: returnstr = "10:45";break;
+                case 9: returnstr = "11:00";break;
+                case 10: returnstr = "11:15";break;
+                case 11: returnstr = "11:30";break;
+                case 12: returnstr = "11:45";break;
+                case 13: returnstr = "12:00";break;
+                case 14: returnstr = "12:15";break;
+                case 15: returnstr = "12:30";break;
+                case 16: returnstr = "12:45";break;
+                case 17: returnstr = "13:00";break;
+                case 18: returnstr = "13:15";break;
+                case 19: returnstr = "13:30";break;
+                case 20: returnstr = "13:45";break;
+                case 21: returnstr = "14:00";break;
+                case 22: returnstr = "14:15";break;
+                case 23: returnstr = "14:30";break;
+                case 24: returnstr = "14:45";break;
+                case 25: returnstr = "15:00";break;
+                case 26: returnstr = "15:15";break;
+                case 27: returnstr = "15:30";break;
+                case 28: returnstr = "15:45";break;
+                case 29: returnstr = "16:00";break;
+                case 30: returnstr = "16:15";break;
+                case 31: returnstr = "16:30";break;
+                case 32: returnstr = "16:45";break;
+                case 33: returnstr = "17:00";break;
+                case 34: returnstr = "17:15";break;
+                case 35: returnstr = "17:30";break;
+                case 36: returnstr = "17:45";break;
+                case 37: returnstr = "18:00";break;
+                case 38: returnstr = "18:15";break;
+                case 39: returnstr = "18:30";break;
+                case 40: returnstr = "18:45";break;
+                case 41: returnstr = "19:00";break;
+                case 42: returnstr = "19:15";break;
+                case 42: returnstr = "19:30";break;
+                defalut: returnstr = "undefine";break;
+            }
+            return returnstr;
+        }   
+var color_me=function(coursetype,start,end,day,frame,coursename,courseid){
     //alert(value)
 			
     //state_obj=false;  
@@ -243,6 +295,17 @@ var color_me=function(coursetime,day,frame,coursename,courseid){
 
     this.event_div.className='wc-cal-event ui-corner-all br4';			   
     this.event_time_div.className='wc-time ui-corner-all br4';
+
+    if(coursetype=="ENGLISH"){
+        this.event_time_div.className='wc-cal-eventE ui-corner-all br4';
+    }
+    if(coursetype=="CHINESE"){
+        this.event_time_div.className='wc-call-eventC ui-corner-all br4';
+    }
+    if(coursetype=="OPTIONAL"){
+        this.event_time_div.className='wc-call-eventO ui-corner-all br4';
+    }
+
     this.resize_div.className='ui-resizable-handle ui-resizable-s';	
 
 
@@ -255,19 +318,13 @@ var color_me=function(coursetime,day,frame,coursename,courseid){
     //    isdownObj=true;
      //   is_current_obj=true;
    // }
-        var start=0;
-        var delta=0;
         var strday='abc';
-        switch (parseInt(coursetime))
-        {
-            case 1:  start=8;delta=2;strday = "8:00-10:00";break;
-            case 2:  start=10.5;delta=2;strday = "10:30-12:30";break;
-            case 3:  start=13.5;delta=2;strday = "13:30-15:30";break;
-            case 4:  start=16;delta=2;strday = "16:00-18:00";break;
-        }
-
-        var y= ((120*(start-5))/3).toString();
-        var height = ((delta*120)/3).toString();//each hour 40
+        var strday1 = chooseday(start);
+        var strday2 = chooseday(end);
+        var delta = (parseInt(end)-parseInt(start));   //15min for each gap
+        var ydelta = parseInt(start-1)+(9-7)*4; //90/60 is the base of time as class start at 9:00
+        var y= (ydelta*10).toString();
+        var height = (delta*10).toString();//each hour 40
         this.event_div.style.top=y +'px';
         this.event_div.style.height= height+'px';
         var date=new Date(day);
@@ -281,9 +338,9 @@ var color_me=function(coursetime,day,frame,coursename,courseid){
 
         this.event_div.id=day+''+y+'_event_div';
         this.event_time_div.id=day+''+y+'_event_time';
-        this.event_time_div.innerHTML = strday;
+        this.event_time_div.innerHTML = coursename_link;
         this.event_content_div.id=day+''+y+'_event_content';
-        this.event_content_div.innerHTML=coursename_link;
+        this.event_content_div.innerHTML=strday1+"~"+strday2;
         this.event_div.appendChild(this.event_time_div);
         this.event_div.appendChild(this.event_content_div);
         //addEvents(this.resize_div,'mousedown',function(event){resize_downEvent(day,event); });
@@ -315,7 +372,7 @@ var Slot_div_j=function(date,handle_data,j){
 	
 	this.slot_div_j=_create('div');
 	this.slot_div_j.className='wc-day-column-inner';
-	this.slot_div_j.style.height='640px';
+	this.slot_div_j.style.height='560px';
 	this.slot_div_j.id=dateMDY+'_week';
 	
     length = handle_data.length
@@ -338,7 +395,8 @@ var Slot_div_j=function(date,handle_data,j){
                         var timecourse = handle_data[pos].coursetime[timepos];
                         if (timecourse.dayofweek == j){
                             var dateMDY=date.format("MM/dd/yyyy");
-                            color_me(timecourse.timeofday,dateMDY,this.slot_div_j,handle_data[pos].coursename,handle_data[pos].courseid);
+                            coursetype = handle_data[pos].coursetype;
+                            color_me(coursetype,timecourse.timeofdaystart,timecourse.timeofdayend,dateMDY,this.slot_div_j,handle_data[pos].coursename,handle_data[pos].courseid);
                         }
 
                     }

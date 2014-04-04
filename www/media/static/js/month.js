@@ -132,6 +132,9 @@ var Grid_td=function(language,year,month,day,date,ndate,i,j,w,days){
 	this.day; 
 	
 	var g='';
+    var me=document.getElementById('month.js').getAttribute('courseinfo');
+    var handle_data = eval(me);
+    length = handle_data.length
 	
 	if(i==1&&j>=w){
 		day++;
@@ -143,19 +146,6 @@ var Grid_td=function(language,year,month,day,date,ndate,i,j,w,days){
 		this.c_g_td.id='day_'+day;
 		var g="<div class='day_d' ><a class='day_num'>"+day+"</a>"+lunarhtml+
 		"</font><a class='add_event'  id='add_"+day+"'><img src='/media/static/images/add.gif' onclick=showModalDialog('"+date.format('MM/'+day+'/yyyy')+"',18,34) ><a/></div>";
-	}else if(i>1&&day<days){
-		day++;
-		var lunarhtml='';
-		if(language.type=='chinese'){
-			var lunar=lunarday((month+1)+'//'+day+'//'+year);
-			var lunarhtml="&nbsp;&nbsp;<font color='#777' style='font-size:8px'>"+lunar+"</font>";
-		}
-        //ADD YUBIN j is the week of day
-	   // if (day == 26){
-        var me=document.getElementById('month.js').getAttribute('courseinfo');
-        var handle_data = eval(me);
-        //alert(me)
-        length = handle_data.length
         for (var pos=0;pos<length;pos++){
             for (var timepos=0;timepos<handle_data[pos].coursetime.length;timepos++){
                 var date_start = new Date()
@@ -167,18 +157,71 @@ var Grid_td=function(language,year,month,day,date,ndate,i,j,w,days){
                 year_e = (handle_data[pos].coursetime[timepos].end_date.year);
                 month_e = (handle_data[pos].coursetime[timepos].end_date.month);
                 day_e = (handle_data[pos].coursetime[timepos].end_date.day);
-                date_start.setFullYear(year_s,month_s,day_s)
-                date_end.setFullYear(year_e,month_e,day_e)
-                compare.setFullYear(year,month+1,day)
+                date_start.setFullYear(year_s,month_s-1,day_s)
+                date_end.setFullYear(year_e,month_e-1,day_e)
+                compare.setFullYear(year,month,day)
                 if(compare>=date_start&&compare<=date_end)
                 {
+                    
                     if (handle_data[pos].coursetime[timepos].dayofweek == j)
+                    {
                         this.c_g_td.className+=" hscourse"; 
+                        if(handle_data[pos].coursetype=="ENGLISH"){
+                            this.c_g_td.className+=" hscourseE"; 
+                        }
+                        if(handle_data[pos].coursetype=="CHINESE"){
+                            this.c_g_td.className+=" hscourseC"; 
+                        }
+                        if(handle_data[pos].coursetype=="OPTIONAL"){
+                            this.c_g_td.className+=" hscourseO"; 
+                        }
+                }
                     
                 }
             }
         }
-        //}
+	}else if(i>1&&day<days){
+		day++;
+		var lunarhtml='';
+		if(language.type=='chinese'){
+			var lunar=lunarday((month+1)+'//'+day+'//'+year);
+			var lunarhtml="&nbsp;&nbsp;<font color='#777' style='font-size:8px'>"+lunar+"</font>";
+		}
+        //ADD YUBIN j is the week of day
+        for (var pos=0;pos<length;pos++){
+            for (var timepos=0;timepos<handle_data[pos].coursetime.length;timepos++){
+                var date_start = new Date()
+                var date_end = new Date()
+                var compare = new Date()
+                year_s = (handle_data[pos].coursetime[timepos].start_date.year);
+                month_s =(handle_data[pos].coursetime[timepos].start_date.month);
+                day_s = (handle_data[pos].coursetime[timepos].start_date.day);
+                year_e = (handle_data[pos].coursetime[timepos].end_date.year);
+                month_e = (handle_data[pos].coursetime[timepos].end_date.month);
+                day_e = (handle_data[pos].coursetime[timepos].end_date.day);
+                date_start.setFullYear(year_s,month_s-1,day_s)
+                date_end.setFullYear(year_e,month_e-1,day_e)
+                compare.setFullYear(year,month,day)
+                if(compare>=date_start&&compare<=date_end)
+                {
+                    
+                    if (handle_data[pos].coursetime[timepos].dayofweek == j)
+                    {
+                        this.c_g_td.className+=" hscourse"; 
+                        if(handle_data[pos].coursetype=="ENGLISH"){
+                            this.c_g_td.className+=" hscourseE"; 
+                        }
+                        if(handle_data[pos].coursetype=="CHINESE"){
+                            this.c_g_td.className+=" hscourseC"; 
+                        }
+                        if(handle_data[pos].coursetype=="OPTIONAL"){
+                            this.c_g_td.className+=" hscourseO"; 
+                        }
+                }
+                    
+                }
+            }
+        }
         
 
 		this.c_g_td.id='day_'+day;
